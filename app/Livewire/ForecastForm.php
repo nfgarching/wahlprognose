@@ -130,6 +130,17 @@ class ForecastForm extends Component
         }
     }
 
+    public function updatedSeatDistribution(mixed $value, string $key): void
+    {
+        $partyId = (int) $key;
+        $others = array_sum(array_filter(
+            $this->seatDistribution,
+            fn ($k) => $k !== $partyId,
+            ARRAY_FILTER_USE_KEY
+        ));
+        $this->seatDistribution[$partyId] = max(0, min((int) $value, self::TOTAL_SEATS - $others));
+    }
+
     public function submit(): void
     {
         $this->validate([

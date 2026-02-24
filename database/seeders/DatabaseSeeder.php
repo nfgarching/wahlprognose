@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PartySeeder::class,
             CandidateSeeder::class,
+            ForecastSeeder::class,
         ]);
     }
 }

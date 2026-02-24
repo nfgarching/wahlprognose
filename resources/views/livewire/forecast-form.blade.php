@@ -256,9 +256,17 @@
                             @disabled($seats === 0 || $this->deadlinePassed)
                         >−</button>
 
-                        <span class="w-8 text-center font-bold text-slate-900 tabular-nums text-base">
-                            {{ $seats }}
-                        </span>
+                        <input
+                            type="number"
+                            min="0"
+                            max="{{ \App\Livewire\ForecastForm::TOTAL_SEATS }}"
+                            wire:model.live="seatDistribution.{{ $party->id }}"
+                            @if($this->deadlinePassed) readonly @endif
+                            class="w-12 text-center font-bold text-slate-900 tabular-nums text-base rounded-lg border border-slate-200 py-1
+                                focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition
+                                [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+                                read-only:opacity-50 read-only:cursor-not-allowed"
+                        >
 
                         <button
                             type="button"
@@ -397,5 +405,12 @@
             </button>
         </div>
     @endif
+
+    {{-- Datenschutz-Hinweis --}}
+    <p class="text-center text-xs text-slate-400 pb-2">
+        Mit dem Absenden stimmst du unserer
+        <a href="{{ route('privacy') }}" target="_blank" class="underline hover:text-slate-600">Datenschutzerklärung</a>
+        zu. Deine IP-Adresse wird zur Missbrauchsprävention gespeichert.
+    </p>
 
 </div>
