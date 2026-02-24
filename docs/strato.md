@@ -197,6 +197,17 @@ composer --version
 
 ---
 
+### Node.js installieren
+
+´´´bash
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt-get install -y nodejs
+node --version
+npm --version
+´´´
+
+After upgrading, run npm install again (since node_modules may need rebuilding), then npm run build or composer dev.
+
 ### SSH-Schlüssel für GitHub installieren
 
 Im ~/.ssh/-Verzeichnis fehlen die nötigen Dateien (id_rsa, id_ed25519 o.ä.) — nur authorized_keys und known_hosts sind vorhanden. Lösung: SSH-Schlüssel erstellen und bei GitHub hinterlegen:
