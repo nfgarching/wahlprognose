@@ -41,8 +41,6 @@ Erstellungsdatum: 24.02.26 09:34:04
 
 ## Konfiguration des Webserver
 
-*Als root einloggen*
-
 ### SSH-Zugänge
 
 #### SSH-Zugang für root
@@ -277,7 +275,7 @@ Hier sind die Schritte, um einen dedizierten Systembenutzer `norbert` anzulegen 
 
 ## Laravel installieren und konfigurieren
 
-*Als norbert einloggen*:
+### Als norbert einloggen
 
 ```bash
 ssh norbert@217.160.15.161
@@ -290,6 +288,8 @@ ssh norbert@217.160.15.161
 cd /var/www
 git clone git@github.com:nfgarching/wahlprognose.git
 composer install
+sudo apt install npm
+npm install && npm run build
 ```
 
 ### Verzeichnisrechte anpassen
