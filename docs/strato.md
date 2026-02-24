@@ -39,9 +39,11 @@ Datacenter region: Rechenzentrum:Süddeutschland
 Availability zone: 1
 Erstellungsdatum: 24.02.26 09:34:04
 
-## Konfiguration
+## Konfiguration des Webserver
 
-### SSH - Zugang
+### SSH-Zugänge
+
+#### SSH-Zugang für root
 
 ```bash
 ssh-copy-id -i ~/.ssh/id_ed25519.pub root@217.160.15.161
@@ -57,13 +59,79 @@ ssh root@217.160.15.161
 
 and check to make sure that only the key(s) you wanted were added.
 
+#### SSH-Zugang für norbert
+
+##### Benutzer norbert anlegen
+
+```bash
+useradd -m -s /bin/bash norbert
+passwd norbert
+```
+
+##### norbert der Gruppe www-data hinzufügen
+
+```bash
+usermod -aG www-data norbert
+```
+
+##### www-data der Gruppe norbert hinzufügen
+
+```bash
+usermod -aG norbert www-data
+```
+
+##### SSH-Zugang für norbert einrichten (optional, aber empfohlen)
+
+```bash
+mkdir -p /home/norbert/.ssh
+chmod 700 /home/norbert/.ssh
+# Deinen öffentlichen SSH-Key hinterlegen
+nano /home/norbert/.ssh/authorized_keys
+chmod 600 /home/norbert/.ssh/authorized_keys
+chown -R norbert:norbert /home/norbert/.ssh
+```
+
+Now try logging into the machine, with:
+
+```bash
+ssh norbert@217.160.15.161
+
+```
+
+and check to make sure that only the key(s) you wanted were added.
+
+
+##### Root-Login per SSH deaktivieren (empfohlen)
+
+```bash
+nano /etc/ssh/sshd_config
+```
+
+Diese Zeile anpassen:
+
+```
+PermitRootLogin no
+```
+
+Dann SSH neu starten:
+
+```bash
+systemctl restart sshd
+```
+
+> **Wichtig:** Stelle sicher, dass du dich vorher erfolgreich als `norbert` per SSH einloggen kannst, bevor du den Root-Login deaktivierst – sonst sperrst du dich aus.
+
+
+
+
+
 ### Webserver einrichten
 
 Hier ist die angepasste Anleitung für den Root-User und die App `wahlprognose`:
 
 ---
 
-#### 1. System aktualisieren
+#### System aktualisieren
 
 ```bash
 apt update && apt upgrade -y
@@ -71,7 +139,7 @@ apt update && apt upgrade -y
 
 ---
 
-#### 2. Nginx installieren
+#### Nginx installieren
 
 ```bash
 apt install -y nginx
@@ -81,7 +149,7 @@ systemctl start nginx
 
 ---
 
-#### 3. PHP 8.3 + PHP-FPM installieren
+#### PHP 8.3 + PHP-FPM installieren
 
 ```bash
 apt install -y php8.3-fpm php8.3-cli php8.3-common \
@@ -95,7 +163,7 @@ systemctl start php8.3-fpm
 
 ---
 
-#### 4. MySQL installieren
+### MySQL installieren
 
 ```bash
 apt install -y mysql-server
@@ -119,7 +187,7 @@ EXIT;
 
 ---
 
-#### 5. Composer installieren
+### Composer installieren
 
 ```bash
 curl -sS https://getcomposer.org/installer | php
@@ -129,7 +197,7 @@ composer --version
 
 ---
 
-#### 6. SSH-Schlüssel für GitHub installieren
+### SSH-Schlüssel für GitHub installieren
 
 Im ~/.ssh/-Verzeichnis fehlen die nötigen Dateien (id_rsa, id_ed25519 o.ä.) — nur authorized_keys und known_hosts sind vorhanden. Lösung: SSH-Schlüssel erstellen und bei GitHub hinterlegen:
 
@@ -147,19 +215,9 @@ cat ~/.ssh/id_ed25519.pub
 
 Dann den angezeigten Schlüssel unter GitHub → Settings → SSH and GPG keys → New SSH key eintragen.
 
-#### 7. Laravel installieren
-
-```bash
-cd /var/www
-git clone git@github.com:nfgarching/wahlprognose.git
-chown -R www-data:www-data /var/www/wahlprognose
-chmod -R 755 /var/www/wahlprognose/storage
-chmod -R 755 /var/www/wahlprognose/bootstrap/cache
-```
-
 ---
 
-#### 8. Nginx konfigurieren
+### Nginx konfigurieren
 
 ```bash
 nano /etc/nginx/sites-available/wahlprognose
@@ -210,7 +268,42 @@ systemctl reload nginx
 
 ---
 
-#### 9. Laravel `.env` konfigurieren
+
+Hier sind die Schritte, um einen dedizierten Systembenutzer `norbert` anzulegen und ihn korrekt mit `www-data` zu verknüpfen:
+
+
+
+## Laravel installieren und konfigurieren
+
+### Als norbert einloggen
+
+```bash
+ssh norbert@217.160.15.161
+
+```
+
+### Laravel App von Github clonen
+
+```bash
+cd /var/www
+git clone git@github.com:nfgarching/wahlprognose.git
+composer install
+sudo apt install npm
+npm install && npm run build
+```
+
+### Verzeichnisrechte anpassen
+
+```bash
+chown -R norbert:www-data /var/www/wahlprognose
+chmod -R 750 /var/www/wahlprognose
+chmod -R 775 /var/www/wahlprognose/storage
+chmod -R 775 /var/www/wahlprognose/bootstrap/cache
+```
+
+---
+
+### Laravel `.env` konfigurieren
 
 ```bash
 cd /var/www/wahlprognose
@@ -222,8 +315,8 @@ nano .env
 Anpassen:
 
 ```env
-APP_NAME=wahlprognose
-APP_URL=https://deine-domain.de
+APP_NAME=Wahlprognose
+APP_URL=http://217.160.15.161
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -235,7 +328,7 @@ DB_PASSWORD=sicheres_passwort
 
 ---
 
-#### 10. SSL mit Let's Encrypt einrichten
+## 10. SSL mit Let's Encrypt einrichten
 
 ```bash
 apt install -y certbot python3-certbot-nginx
@@ -244,7 +337,7 @@ certbot --nginx -d deine-domain.de -d www.deine-domain.de
 
 ---
 
-#### 11. Redis installieren (optional)
+## 11. Redis installieren (optional)
 
 ```bash
 apt install -y redis-server
@@ -273,7 +366,7 @@ php artisan route:cache
 ---
 
 
-Aufruf der Webseite http://217.160.15.161/
+Aufruf der Webseite http://217.160.15.161
 
 
 ### Clone App
