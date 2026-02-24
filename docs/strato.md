@@ -376,10 +376,4 @@ php artisan route:cache
 
 ---
 
-
 Aufruf der Webseite http://217.160.15.161
-
-
-### Clone App
-
-git clone git@github.com:nfgarching/wahlprognose.git
