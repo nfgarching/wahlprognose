@@ -3,11 +3,11 @@
 use App\Livewire\ForecastForm;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return view('welcome');
-})->name('home');
+})->name('welcome');
 
-Route::livewire('/prognose', ForecastForm::class)->name('forecast');
+Route::livewire('/', ForecastForm::class)->name('home');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
