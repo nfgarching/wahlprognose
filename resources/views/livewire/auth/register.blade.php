@@ -52,6 +52,14 @@
                 viewable
             />
 
+            <!-- Newsletter -->
+            <flux:checkbox
+                name="wants_newsletter"
+                value="1"
+                :checked="old('wants_newsletter')"
+                label="Beim Newsletter der Bürger für Garching eintragen, um auf dem Laufenden zu bleiben"
+            />
+
             <div class="flex items-center justify-end">
                 <flux:button type="submit" variant="primary" class="w-full" data-test="register-user-button">
                     {{ __('Create account') }}

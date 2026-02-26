@@ -130,7 +130,21 @@
     @endif
 
     {{-- ==================== GESAMTÜBERSICHT ==================== --}}
-    @if ($this->forecastCount > 0)
+    @if (! $this->forecast)
+        <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200 dark:border-zinc-700 shadow-sm p-5 flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm font-semibold text-slate-800 dark:text-white">Gesamtübersicht noch gesperrt</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+                    Die Gesamtübersicht aller Prognosen wird sichtbar, sobald du deine eigene Prognose abgegeben hast.
+                </p>
+            </div>
+        </div>
+    @elseif ($this->forecastCount > 0)
         <div class="bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200 dark:border-zinc-700 shadow-sm overflow-hidden">
 
             <div class="px-6 py-4 border-b border-slate-100 dark:border-zinc-700 flex items-center gap-3">
