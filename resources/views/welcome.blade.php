@@ -119,7 +119,7 @@
             @else
                 <button type="button" data-guest-modal-trigger
                     class="inline-block bg-white text-blue-900 px-10 py-4 rounded font-black text-xl hover:bg-yellow-400 hover:scale-105 transition-all duration-300 cursor-pointer">
-                    JETZT ZUR WAHLPROGNOSE →
+                    JETZT WAHLPROGNOSE ABGEBEN
                 </button>
             @endauth
         </div>
@@ -132,6 +132,7 @@
             <div class="text-slate-400 text-sm">
                 &copy; (c) 2026 – Überparteilicher Wahlaufruf für Garching b. München.
                 &mdash; <a href="{{ route('privacy') }}" class="underline hover:text-slate-600">Datenschutzerklärung</a>
+                &mdash; <a href="{{ route('impressum') }}" class="underline hover:text-slate-600">Impressum</a>
             </div>
         </div>
     </footer>

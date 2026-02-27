@@ -456,7 +456,7 @@
                     </svg>
                     {{ Auth::check() ? 'Zum Dashboard' : 'Zur Startseite' }}
                 </a>
-                <a href="https://bfg-garching.de"
+                <a href="https://www.buerger-fuer-garching.de"
                    target="_blank"
                    rel="noopener noreferrer"
                    class="flex items-center justify-center gap-2 w-full px-4 py-3 border border-slate-300 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition-colors">

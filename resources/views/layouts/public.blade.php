@@ -36,9 +36,11 @@
         {{-- Footer --}}
         <footer class="mt-16 border-t border-slate-200 bg-white">
             <div class="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-slate-400 space-y-1">
-                <p>Kommunalwahl Garching bei München &mdash; 15. März 2026 &mdash; Inoffizielle Bürgerschätzung</p>
-                <p>
+                <p>Kommunalwahl Garching bei München &mdash; 08. März 2026 &mdash; Inoffizielle Bürgerschätzung</p>
+                <p class="flex items-center justify-center gap-3">
                     <a href="{{ route('privacy') }}" class="hover:text-slate-600 underline underline-offset-2">Datenschutzerklärung</a>
+                    <span aria-hidden="true">&middot;</span>
+                    <a href="{{ route('impressum') }}" class="hover:text-slate-600 underline underline-offset-2">Impressum</a>
                 </p>
             </div>
         </footer>

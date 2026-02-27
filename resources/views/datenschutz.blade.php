@@ -42,9 +42,9 @@
                     <h2 class="text-base font-semibold text-slate-900 mb-2">1. Verantwortliche Stelle</h2>
                     <p>
                         Verantwortlich für die Datenverarbeitung auf dieser Website ist die
-                        <strong>Natürlichen Freunde Garching e.&thinsp;V. (NfG)</strong>.
+                        <strong>Norbert Fröhler</strong>.
                         Bei Fragen zum Datenschutz wende dich bitte per E-Mail an:
-                        <a href="mailto:info@nfgarching.de" class="text-blue-700 hover:underline">info@nfgarching.de</a>.
+                        <a href="mailto:norbert.froehler@gmail.com" class="text-blue-700 hover:underline">norbert.froehler@gmail.com</a>.
                     </p>
                 </section>
 
@@ -57,6 +57,7 @@
                         <li><strong>Prognose-Daten:</strong> Deine gewählten Bürgermeisterkandidaten und die eingegebene Sitzverteilung.</li>
                         <li><strong>Zugangsdaten (nur registrierte Nutzer):</strong> Name und E-Mail-Adresse, die du bei der Registrierung angibst.</li>
                         <li><strong>Serverlogs:</strong> Technische Zugriffsdaten (IP-Adresse, Browser, Zeitstempel) zur Betriebssicherheit.</li>
+                        <li><strong>Newsletter (optional):</strong> E-Mail-Adresse, sofern du dich für unseren Newsletter anmeldest.</li>
                     </ul>
                 </section>
 
@@ -127,12 +128,32 @@
                     </ul>
                     <p class="mt-3">
                         Zur Ausübung deiner Rechte wende dich an:
-                        <a href="mailto:info@nfgarching.de" class="text-blue-700 hover:underline">info@nfgarching.de</a>
+                        <a href="mailto:norbert.froehler@gmail.com" class="text-blue-700 hover:underline">norbert.froehler@gmail.com</a>
                     </p>
                 </section>
 
                 <section>
-                    <h2 class="text-base font-semibold text-slate-900 mb-2">9. Beschwerderecht</h2>
+                    <h2 class="text-base font-semibold text-slate-900 mb-2">9. Newsletter</h2>
+                    <p class="mb-2">
+                        Wenn du dich zu unserem Newsletter anmeldest, verwenden wir deine E-Mail-Adresse
+                        zum Versand von Informationen rund um die Kommunalwahl Garching 2026 und der Bürger für Garching.
+                    </p>
+                    <ul class="list-disc list-inside space-y-1.5 pl-2 mb-3">
+                        <li><strong>Verarbeitete Daten:</strong> E-Mail-Adresse.</li>
+                        <li><strong>Zweck:</strong> Versand von Neuigkeiten und Ergebnissen zur Kommunalwahl Garching 2026 und der Bürger für Garching.</li>
+                        <li><strong>Rechtsgrundlage:</strong> Einwilligung (Art.&thinsp;6 Abs.&thinsp;1 lit.&thinsp;a DSGVO).</li>
+                        <li><strong>Speicherdauer:</strong> Bis zur Abmeldung vom Newsletter</li>
+                    </ul>
+                    <p>
+                        Du kannst den Newsletter jederzeit abbestellen. Einen Abmeldelink findest du in jeder
+                        Newsletter-E-Mail. Alternativ kannst du dich per E-Mail an
+                        <a href="mailto:norbert.froehler@gmail.com" class="text-blue-700 hover:underline">norbert.froehler@gmail.com</a>
+                        wenden.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="text-base font-semibold text-slate-900 mb-2">10. Beschwerderecht</h2>
                     <p>
                         Du hast das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren.
                         Zuständig ist das
@@ -145,15 +166,20 @@
             </div>
 
             <div class="text-center pb-4">
-                <a href="{{ route('prognose') }}" class="text-sm text-blue-700 hover:underline">← Zurück zur Prognose</a>
+                <a href="{{ route('home') }}" class="text-sm text-blue-700 hover:underline">← Zurück zur Startseite</a>
             </div>
 
         </main>
 
         {{-- Footer --}}
         <footer class="mt-16 border-t border-slate-200 bg-white">
-            <div class="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-slate-400">
-                Kommunalwahl Garching bei München &mdash; 15. März 2026 &mdash; Inoffizielle Bürgerschätzung
+            <div class="max-w-5xl mx-auto px-4 py-6 text-center text-xs text-slate-400 space-y-1">
+                <p>Kommunalwahl Garching bei München &mdash; 08. März 2026 &mdash; Inoffizielle Bürgerschätzung</p>
+                <p class="flex items-center justify-center gap-3">
+                    <a href="{{ route('privacy') }}" class="hover:text-slate-600 underline underline-offset-2">Datenschutzerklärung</a>
+                    <span aria-hidden="true">&middot;</span>
+                    <a href="{{ route('impressum') }}" class="hover:text-slate-600 underline underline-offset-2">Impressum</a>
+                </p>
             </div>
         </footer>
 
