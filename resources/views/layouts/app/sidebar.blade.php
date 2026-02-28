@@ -115,7 +115,7 @@
 
     {{ $slot }}
 
-    <footer
+    {{-- <footer
         class="border-t border-zinc-200 dark:border-zinc-700 py-4 px-6 text-center text-xs text-zinc-400 dark:text-zinc-500">
         <span class="flex items-center justify-center gap-3">
             <a href="{{ route('privacy') }}"
@@ -124,7 +124,7 @@
             <a href="{{ route('impressum') }}"
                 class="hover:text-zinc-600 dark:hover:text-zinc-300 underline underline-offset-2">Impressum</a>
         </span>
-    </footer>
+    </footer> --}}
 
     @fluxScripts
 </body>
