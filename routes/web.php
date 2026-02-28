@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ForecastExportController;
+use App\Livewire\Admin\Forecasts as AdminForecasts;
 use App\Livewire\Dashboard;
 use App\Livewire\ForecastForm;
 use App\Livewire\Results;
@@ -29,5 +30,9 @@ Route::livewire('/dashboard', Dashboard::class)
 Route::get('/dashboard/export', ForecastExportController::class)
     ->middleware(['auth', 'verified'])
     ->name('forecast.export');
+
+Route::livewire('/admin/prognosen', AdminForecasts::class)
+    ->middleware(['auth', 'verified'])
+    ->name('admin.forecasts');
 
 require __DIR__.'/settings.php';

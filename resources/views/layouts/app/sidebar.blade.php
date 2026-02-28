@@ -26,6 +26,16 @@
             </flux:sidebar.group>
         </flux:sidebar.nav>
 
+        @if(auth()->user()?->is_admin)
+            <flux:sidebar.nav>
+                <flux:sidebar.group :heading="__('Admin')" class="grid">
+                    <flux:sidebar.item icon="shield-check" :href="route('admin.forecasts')" :current="request()->routeIs('admin.forecasts')" wire:navigate>
+                        Prognosen
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
+            </flux:sidebar.nav>
+        @endif
+
         <flux:spacer />
 
         <flux:sidebar.nav>
