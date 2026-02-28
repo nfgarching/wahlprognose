@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
 
         if (! User::where('email', 'norbert.froehler@gmail.com')->first()) {
             User::factory()->create([
-                'name' => 'Test User',
+                'name' => 'Norbert Fröhler',
                 'email' => 'norbert.froehler@gmail.com',
                 'password' => \Illuminate\Support\Facades\Hash::make('v1adimiR'),
                 'is_admin' => True,

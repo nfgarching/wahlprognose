@@ -3,41 +3,41 @@
 ## Serverdaten
 
 Der Server-Benutzername lautet root.
-Das Passwort für den Zugriff auf den Server lautet MqC@h&4%!i
+Das Passwort für den Zugriff auf den Server lautet *zQ%n$8R72
 
 ### Zugangsdaten:
 
-Host: 217.160.15.161
+Host: 82.165.250.164
 Benutzer: root
-Initial-Passwort: MqC@h&4%!i
+Initial-Passwort: *zQ%n$8R72
 
 ### DNS:
 
-DNS-Hostname: 7cd7667.online-server.cloud
+DNS-Hostname: a1a6f4f.online-server.cloud
 Image: Quelle: STRATO Images
 Betriebssystem: Ubuntu 24.04
 
 ### IP:
 
-IPv4-Adresse: 217.160.15.161
+IPv4-Adresse: 82.165.250.164
 IPv6-Adresse: Keine IPv6-Adresse verfügbar
 
 ### Konfiguration:
 
 Typ:Cloud Server
 CPU:1 vCore
-RAM:1 GB
-SSD:10 GB
+RAM:2 GB
+SSD:20 GB
 Connection speed up to:400 Mbps
 
 ### Firewall-Richtlinien:
 
-217.160.15.161 Linux
+82.165.250.164 Linux
 Private Netzwerke: Kein privates Netzwerk vorhanden
 Monitoring-Richtlinien: Standard Monitoring-Richtlinie
 Datacenter region: Rechenzentrum:Süddeutschland
 Availability zone: 1
-Erstellungsdatum: 24.02.26 09:34:04
+Erstellungsdatum: 27.02.26 21:25:29
 
 ## Konfiguration des Webserver
 
@@ -46,14 +46,14 @@ Erstellungsdatum: 24.02.26 09:34:04
 #### SSH-Zugang für root
 
 ```bash
-ssh-copy-id -i ~/.ssh/id_ed25519.pub root@217.160.15.161
+ssh-copy-id -i ~/.ssh/id_ed25519.pub root@82.165.250.164
 
 ```
 
 Now try logging into the machine, with:
 
 ```bash
-ssh root@217.160.15.161
+ssh root@82.165.250.164
 
 ```
 
@@ -65,7 +65,7 @@ and check to make sure that only the key(s) you wanted were added.
 
 ```bash
 useradd -m -s /bin/bash norbert
-passwd norbert
+passwd norbert -> *zQ%n$8R72
 ```
 
 ##### norbert der Gruppe www-data hinzufügen
@@ -80,7 +80,24 @@ usermod -aG www-data norbert
 usermod -aG norbert www-data
 ```
 
-##### SSH-Zugang für norbert einrichten (optional, aber empfohlen)
+#### SSH-Zugang für norbert
+
+```bash
+ssh-copy-id -i ~/.ssh/id_ed25519.pub root@82.165.250.164
+
+```
+
+Now try logging into the machine, with:
+
+```bash
+ssh root@82.165.250.164
+
+```
+
+and check to make sure that only the key(s) you wanted were added.
+
+
+##### SSH-Zugang für norbert einrichten (alternativ, aber empfohlen)
 
 ```bash
 mkdir -p /home/norbert/.ssh
@@ -94,7 +111,7 @@ chown -R norbert:norbert /home/norbert/.ssh
 Now try logging into the machine, with:
 
 ```bash
-ssh norbert@217.160.15.161
+ssh norbert@82.165.250.164
 
 ```
 
@@ -149,16 +166,19 @@ systemctl start nginx
 
 ---
 
-#### PHP 8.3 + PHP-FPM installieren
+#### PHP 8.4 + PHP-FPM installieren
 
 ```bash
-apt install -y php8.3-fpm php8.3-cli php8.3-common \
-  php8.3-mysql php8.3-xml php8.3-mbstring php8.3-curl \
-  php8.3-zip php8.3-bcmath php8.3-tokenizer php8.3-gd \
-  php8.3-redis php8.3-intl
+add-apt-repository -y ppa:ondrej/php
+apt-get update
 
-systemctl enable php8.3-fpm
-systemctl start php8.3-fpm
+apt install -y php8.4-fpm php8.4-cli php8.4-common \
+  php8.4-mysql php8.4-xml php8.4-mbstring php8.4-curl \
+  php8.4-zip php8.4-bcmath php8.4-tokenizer php8.4-gd \
+  php8.4-redis php8.4-intl
+
+systemctl enable php8.4-fpm
+systemctl start php8.4-fpm
 ```
 
 ---
@@ -174,7 +194,7 @@ mysql_secure_installation
 Datenbank anlegen:
 
 ```bash
-mysql -u root -p
+mysql -u root -p -> *zQ%n$8R72
 ```
 
 ```sql
@@ -208,26 +228,6 @@ npm --version
 
 After upgrading, run npm install again (since node_modules may need rebuilding), then npm run build or composer dev.
 
-### SSH-Schlüssel für GitHub installieren
-
-Im ~/.ssh/-Verzeichnis fehlen die nötigen Dateien (id_rsa, id_ed25519 o.ä.) — nur authorized_keys und known_hosts sind vorhanden. Lösung: SSH-Schlüssel erstellen und bei GitHub hinterlegen:
-
-1. Neuen SSH-Schlüssel generieren
-
-```bash
-ssh-keygen -t ed25519 -C "norbert.froehler@gmail.com"
-```
-
-2. Öffentlichen Schlüssel anzeigen 
-
-```bash
-cat ~/.ssh/id_ed25519.pub
-```
-
-Dann den angezeigten Schlüssel unter GitHub → Settings → SSH and GPG keys → New SSH key eintragen.
-
----
-
 ### Nginx konfigurieren
 
 ```bash
@@ -239,7 +239,7 @@ Inhalt:
 ```nginx
 server {
     listen 80;
-    server_name deine-domain.de www.deine-domain.de;
+    server_name 82.165.250.164;
     root /var/www/wahlprognose/public;
 
     add_header X-Frame-Options "SAMEORIGIN";
@@ -258,7 +258,7 @@ server {
     error_page 404 /index.php;
 
     location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         include fastcgi_params;
     }
@@ -279,27 +279,48 @@ systemctl reload nginx
 
 ---
 
-
 Hier sind die Schritte, um einen dedizierten Systembenutzer `norbert` anzulegen und ihn korrekt mit `www-data` zu verknüpfen:
 
-
+```bash
+chown -R norbert:www-data /var/www
+```
 
 ## Laravel installieren und konfigurieren
 
 ### Als norbert einloggen
 
 ```bash
-ssh norbert@217.160.15.161
+ssh norbert@82.165.250.164
 
 ```
+
+### SSH-Schlüssel für GitHub installieren
+
+Im ~/.ssh/-Verzeichnis fehlen die nötigen Dateien (id_rsa, id_ed25519 o.ä.) — nur authorized_keys und known_hosts sind vorhanden. Lösung: SSH-Schlüssel erstellen und bei GitHub hinterlegen:
+
+1. Neuen SSH-Schlüssel generieren
+
+```bash
+ssh-keygen -t ed25519 -C "norbert.froehler@gmail.com"
+```
+
+2. Öffentlichen Schlüssel anzeigen 
+
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+
+Dann den angezeigten Schlüssel unter GitHub → Settings → SSH and GPG keys → New SSH key eintragen.
+
+---
 
 ### Laravel App von Github clonen
 
 ```bash
 cd /var/www
 git clone git@github.com:nfgarching/wahlprognose.git
+
 composer install
-sudo apt install npm
 npm install && npm run build
 ```
 
@@ -327,7 +348,7 @@ Anpassen:
 
 ```env
 APP_NAME=Wahlprognose
-APP_URL=http://217.160.15.161
+APP_URL=http://82.165.250.164
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -339,16 +360,16 @@ DB_PASSWORD=sicheres_passwort
 
 ---
 
-## 10. SSL mit Let's Encrypt einrichten
+## SSL mit Let's Encrypt einrichten
 
 ```bash
 apt install -y certbot python3-certbot-nginx
-certbot --nginx -d deine-domain.de -d www.deine-domain.de
+certbot --nginx -d http://82.165.250.164 -d www.deine-domain.de
 ```
 
 ---
 
-## 11. Redis installieren (optional)
+## Redis installieren (optional)
 
 ```bash
 apt install -y redis-server
@@ -365,7 +386,7 @@ SESSION_DRIVER=redis
 
 ---
 
-## 11. Abschließender Check
+## Abschließender Check
 
 ```bash
 cd /var/www/wahlprognose
@@ -376,4 +397,4 @@ php artisan route:cache
 
 ---
 
-Aufruf der Webseite http://217.160.15.161
+Aufruf der Webseite http://82.165.250.164
