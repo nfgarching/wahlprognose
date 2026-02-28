@@ -45,8 +45,64 @@
         <div class="relative max-w-5xl mx-auto px-4 text-center">
             <h1 class="text-4xl md:text-6xl font-black mb-6 uppercase tracking-tight">Garching wählt die Zukunft.</h1>
             <p class="text-xl md:text-2xl mb-8 font-light italic">Kommunalwahl am 8. März 2026 – Jede Stimme zählt!</p>
+
+            <div id="countdown" class="flex justify-center gap-4 sm:gap-8 mt-2 mb-2">
+                <div class="flex flex-col items-center">
+                    <span id="cd-days" class="text-4xl sm:text-5xl font-black tabular-nums">--</span>
+                    <span class="text-xs uppercase tracking-widest text-blue-200 mt-1">Tage</span>
+                </div>
+                <div class="text-4xl sm:text-5xl font-black text-blue-300 leading-none pt-0.5">:</div>
+                <div class="flex flex-col items-center">
+                    <span id="cd-hours" class="text-4xl sm:text-5xl font-black tabular-nums">--</span>
+                    <span class="text-xs uppercase tracking-widest text-blue-200 mt-1">Stunden</span>
+                </div>
+                <div class="text-4xl sm:text-5xl font-black text-blue-300 leading-none pt-0.5">:</div>
+                <div class="flex flex-col items-center">
+                    <span id="cd-minutes" class="text-4xl sm:text-5xl font-black tabular-nums">--</span>
+                    <span class="text-xs uppercase tracking-widest text-blue-200 mt-1">Minuten</span>
+                </div>
+                <div class="text-4xl sm:text-5xl font-black text-blue-300 leading-none pt-0.5">:</div>
+                <div class="flex flex-col items-center">
+                    <span id="cd-seconds" class="text-4xl sm:text-5xl font-black tabular-nums">--</span>
+                    <span class="text-xs uppercase tracking-widest text-blue-200 mt-1">Sekunden</span>
+                </div>
+            </div>
+            <p id="countdown-label" class="text-sm text-blue-200 mt-3">bis zum Ende der Prognose-Abgabe</p>
         </div>
     </header>
+
+    <script>
+        (function () {
+            var deadline = new Date('{{ config('forecast.edit_deadline') }}').getTime();
+
+            function pad(n) { return String(n).padStart(2, '0'); }
+
+            function tick() {
+                var now = Date.now();
+                var diff = deadline - now;
+
+                if (diff <= 0) {
+                    document.getElementById('countdown').style.display = 'none';
+                    document.getElementById('countdown-label').textContent = 'Die Prognosephase ist abgelaufen.';
+                    return;
+                }
+
+                var days    = Math.floor(diff / 86400000);
+                var hours   = Math.floor((diff % 86400000) / 3600000);
+                var minutes = Math.floor((diff % 3600000) / 60000);
+                var seconds = Math.floor((diff % 60000) / 1000);
+
+                document.getElementById('cd-days').textContent    = pad(days);
+                document.getElementById('cd-hours').textContent   = pad(hours);
+                document.getElementById('cd-minutes').textContent = pad(minutes);
+                document.getElementById('cd-seconds').textContent = pad(seconds);
+
+                setTimeout(tick, 1000 - (Date.now() % 1000));
+            }
+
+            tick();
+        })();
+    </script>
 
     <section class="max-w-7xl mx-auto px-4 py-20">
         <div class="text-center mb-16">
@@ -159,9 +215,9 @@
                 <p class="text-sm text-slate-600 leading-relaxed mb-2">
                     Registriere dich vorher, um Deine Prognose später bearbeiten zu können.
                 </p>
-                <p class="text-sm font-semibold text-slate-800 mb-6">
+                {{-- <p class="text-sm font-semibold text-slate-800 mb-6">
                     Nur registrierte Benutzer können die Prognosen einsehen.
-                </p>
+                </p> --}}
 
                 <div class="flex flex-col sm:flex-row gap-3">
                     <a href="{{ route('register') }}"
@@ -175,8 +231,9 @@
                 </div>
 
                 <div class="mt-4 text-center">
-                    <a href="{{ route('prognose') }}" class="text-xs text-slate-400 hover:text-slate-600 hover:underline">
-                        Fortfahren als Gastnutzer →
+                    <a href="{{ route('prognose') }}" 
+                        class="flex-1 text-center px-4 py-2.5 border border-slate-300 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-50 transition-colors">
+                        Fortfahren als Gastnutzer
                     </a>
                 </div>
             </div>

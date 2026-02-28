@@ -17,5 +17,8 @@ class ForecastSeeder extends Seeder
 
         // 250 Gast-Prognosen (kein User-Account)
         Forecast::factory(25)->create(['user_id' => null]);
+
+        // Fake-Prognosen (werden bei Berechnungen nicht berücksichtigt)
+        Forecast::factory(5)->fake()->create(['user_id' => null]);
     }
 }

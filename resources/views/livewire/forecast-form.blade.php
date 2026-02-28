@@ -449,12 +449,12 @@
 
             {{-- Links --}}
             <div class="space-y-3">
-                <a href="{{ Auth::check() ? route('dashboard') : route('home') }}"
+                <a href="{{ Auth::check() ? route('dashboard') : route('results') }}"
                    class="flex items-center justify-center gap-2 w-full px-4 py-3 bg-blue-700 text-white font-semibold rounded-xl hover:bg-blue-800 transition-colors">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                     </svg>
-                    {{ Auth::check() ? 'Zum Dashboard' : 'Zur Startseite' }}
+                    {{ Auth::check() ? 'Zum Dashboard' : 'Zu den Prognose-Ergebnissen' }}
                 </a>
                 <a href="https://www.buerger-fuer-garching.de"
                    target="_blank"

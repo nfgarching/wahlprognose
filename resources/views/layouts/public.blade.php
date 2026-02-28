@@ -16,6 +16,7 @@
                     </a>
 
                     <nav class="flex items-center gap-4 text-sm">
+                        {{-- <a href="{{ route('results') }}" class="text-slate-600 hover:text-slate-900 font-medium">Ergebnisse</a> --}}
                         @auth
                             <span class="text-slate-500 hidden sm:inline">{{ auth()->user()->name }}</span>
                             <a href="{{ route('dashboard') }}" class="text-blue-700 hover:underline font-medium">Dashboard</a>

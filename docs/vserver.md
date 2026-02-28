@@ -5,24 +5,24 @@
 Der Server-Benutzername lautet root.
 Das Passwort für den Zugriff auf den Server lautet *zQ%n$8R72
 
-### Zugangsdaten:
+### Zugangsdaten
 
 Host: 82.165.250.164
 Benutzer: root
 Initial-Passwort: *zQ%n$8R72
 
-### DNS:
+### DNS
 
 DNS-Hostname: a1a6f4f.online-server.cloud
 Image: Quelle: STRATO Images
 Betriebssystem: Ubuntu 24.04
 
-### IP:
+### IP
 
 IPv4-Adresse: 82.165.250.164
 IPv6-Adresse: Keine IPv6-Adresse verfügbar
 
-### Konfiguration:
+### Konfiguration
 
 Typ:Cloud Server
 CPU:1 vCore
@@ -30,7 +30,7 @@ RAM:2 GB
 SSD:20 GB
 Connection speed up to:400 Mbps
 
-### Firewall-Richtlinien:
+### Firewall-Richtlinien
 
 82.165.250.164 Linux
 Private Netzwerke: Kein privates Netzwerk vorhanden
@@ -61,51 +61,25 @@ and check to make sure that only the key(s) you wanted were added.
 
 #### SSH-Zugang für norbert
 
-##### Benutzer norbert anlegen
+##### Neuen Benutzer anlegen
 
 ```bash
 useradd -m -s /bin/bash norbert
-passwd norbert -> *zQ%n$8R72
+passwd norbert
 ```
 
-##### norbert der Gruppe www-data hinzufügen
+##### norbert der Gruppe norbert und www-data hinzufügen
 
 ```bash
 usermod -aG www-data norbert
-```
-
-##### www-data der Gruppe norbert hinzufügen
-
-```bash
 usermod -aG norbert www-data
 ```
 
-#### SSH-Zugang für norbert
+#### SSH-Zugang für einrichten
 
 ```bash
-ssh-copy-id -i ~/.ssh/id_ed25519.pub root@82.165.250.164
+ssh-copy-id -i ~/.ssh/id_ed25519.pub norbert@82.165.250.164
 
-```
-
-Now try logging into the machine, with:
-
-```bash
-ssh root@82.165.250.164
-
-```
-
-and check to make sure that only the key(s) you wanted were added.
-
-
-##### SSH-Zugang für norbert einrichten (alternativ, aber empfohlen)
-
-```bash
-mkdir -p /home/norbert/.ssh
-chmod 700 /home/norbert/.ssh
-# Deinen öffentlichen SSH-Key hinterlegen
-nano /home/norbert/.ssh/authorized_keys
-chmod 600 /home/norbert/.ssh/authorized_keys
-chown -R norbert:norbert /home/norbert/.ssh
 ```
 
 Now try logging into the machine, with:
@@ -117,7 +91,6 @@ ssh norbert@82.165.250.164
 
 and check to make sure that only the key(s) you wanted were added.
 
-
 ##### Root-Login per SSH deaktivieren (empfohlen)
 
 ```bash
@@ -126,7 +99,7 @@ nano /etc/ssh/sshd_config
 
 Diese Zeile anpassen:
 
-```
+```text
 PermitRootLogin no
 ```
 

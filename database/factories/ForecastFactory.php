@@ -29,10 +29,16 @@ class ForecastFactory extends Factory
             'user_id' => null,
             'ip_address' => $this->faker->ipv4(),
             'pseudonym' => $this->faker->userName(),
+            'is_fake' => false,
             'mayor_candidate_1_id' => $candidate1Id,
             'mayor_candidate_2_id' => $candidate2Id,
             'mayor_runoff_winner_id' => $runoffWinnerId,
         ];
+    }
+
+    public function fake(): static
+    {
+        return $this->state(['is_fake' => true]);
     }
 
     public function configure(): static

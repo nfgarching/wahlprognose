@@ -15,10 +15,23 @@ class Forecast extends Model
         'user_id',
         'ip_address',
         'pseudonym',
+        'is_fake',
         'mayor_candidate_1_id',
         'mayor_candidate_2_id',
         'mayor_runoff_winner_id',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_fake' => 'boolean',
+        ];
+    }
+
+    public function scopeReal(\Illuminate\Database\Eloquent\Builder $query): void
+    {
+        $query->where('is_fake', false);
+    }
 
     public function user(): BelongsTo
     {

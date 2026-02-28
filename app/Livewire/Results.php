@@ -5,33 +5,20 @@ namespace App\Livewire;
 use App\Models\Candidate;
 use App\Models\Forecast;
 use App\Models\Party;
-use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-#[Title('Dashboard')]
-#[Layout('layouts.app')]
-class Dashboard extends Component
+#[Title('Prognose-Ergebnisse')]
+#[Layout('layouts.public')]
+class Results extends Component
 {
     #[Computed]
-    public function forecast(): ?Forecast
+    public function deadlinePassed(): bool
     {
-        return Forecast::where('user_id', Auth::id())
-            ->with([
-                'mayorCandidate1.party',
-                'mayorCandidate2.party',
-                'mayorRunoffWinner.party',
-                'seats.party',
-            ])
-            ->first();
-    }
-
-    #[Computed]
-    public function parties(): \Illuminate\Database\Eloquent\Collection
-    {
-        return Party::all();
+        return now()->gt(Carbon::parse(config('forecast.edit_deadline')));
     }
 
     #[Computed]
@@ -80,6 +67,6 @@ class Dashboard extends Component
 
     public function render(): \Illuminate\View\View
     {
-        return view('livewire.dashboard');
+        return view('livewire.results');
     }
 }

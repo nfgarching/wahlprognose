@@ -18,7 +18,6 @@ use Livewire\Component;
 class ForecastForm extends Component
 {
     public const TOTAL_SEATS = 24;
-    public const EDIT_DEADLINE = '2026-03-07 23:59:59';
 
     public string $pseudonym = '';
 
@@ -92,13 +91,13 @@ class ForecastForm extends Component
             return false;
         }
 
-        return now()->lte(Carbon::parse(self::EDIT_DEADLINE));
+        return now()->lte(Carbon::parse(config('forecast.edit_deadline')));
     }
 
     #[Computed]
     public function deadlinePassed(): bool
     {
-        return $this->existingForecastId !== null && now()->gt(Carbon::parse(self::EDIT_DEADLINE));
+        return $this->existingForecastId !== null && now()->gt(Carbon::parse(config('forecast.edit_deadline')));
     }
 
     public function toggleMayorCandidate(int $candidateId): void
@@ -167,7 +166,7 @@ class ForecastForm extends Component
             if (! Auth::check()) {
                 $this->addError('general', 'Bitte melde dich an, um deine Prognose zu ändern.');
             } else {
-                $this->addError('general', 'Die Frist zur Änderung der Prognose ist am '.Carbon::parse(self::EDIT_DEADLINE)->format('d.m.Y').' abgelaufen.');
+                $this->addError('general', 'Die Frist zur Änderung der Prognose ist am '.Carbon::parse(config('forecast.edit_deadline'))->format('d.m.Y').' abgelaufen.');
             }
 
             return;
