@@ -2,14 +2,11 @@
 
 ## Serverdaten
 
-Der Server-Benutzername lautet root.
-Das Passwort für den Zugriff auf den Server lautet *zQ%n$8R72
-
-### Zugangsdaten
+### Zugangsdaten zum VServer
 
 Host: 82.165.250.164
 Benutzer: root
-Initial-Passwort: *zQ%n$8R72
+Initial-Passwort: ...
 
 ### DNS
 
@@ -167,7 +164,7 @@ mysql_secure_installation
 Datenbank anlegen:
 
 ```bash
-mysql -u root -p -> *zQ%n$8R72
+mysql -u root -p
 ```
 
 ```sql
