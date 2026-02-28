@@ -68,7 +68,7 @@
                 wire:model.live="pseudonym"
                 placeholder="z. B. GarchingBürger42"
                 maxlength="50"
-                class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition
+                class="w-full rounded-lg border border-slate-300 bg-white text-slate-900 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition
                     @error('pseudonym') border-red-400 focus:border-red-400 focus:ring-red-100 @enderror"
                 @if($this->deadlinePassed) readonly @endif
             >
