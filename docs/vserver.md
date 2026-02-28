@@ -1,4 +1,4 @@
-# Strato Server Cloud
+# Installation eines VServer in der Strato Server Cloud
 
 ## Serverdaten
 
