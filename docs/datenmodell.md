@@ -62,6 +62,7 @@ Eine Prognose pro Eintrag. Gäste können beliebig viele abgeben, registrierte N
 | `user_id` | bigint FK nullable | → `users.id`, `SET NULL` bei Löschung; `null` = Gast |
 | `ip_address` | string(45) nullable | IPv4 oder IPv6 zur Identifikation von Gästen |
 | `pseudonym` | string(50) | Anzeigename, vom Nutzer frei wählbar |
+| `is_fake` | boolean | Markiert Test-/Demo-Einträge; wird per `scopeReal()` ausgefiltert |
 | `mayor_candidate_1_id` | bigint FK nullable | Erster (oder einziger) Kandidat |
 | `mayor_candidate_2_id` | bigint FK nullable | Zweiter Kandidat → impliziert Stichwahl-Prognose |
 | `mayor_runoff_winner_id` | bigint FK nullable | Optionale Prognose des Stichwahl-Gewinners |

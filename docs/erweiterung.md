@@ -59,30 +59,35 @@ Party::updateOrCreate(
 
 ---
 
-## Ergebnisauswertung / Aggregation
+## Ergebnisauswertung
 
-Die gespeicherten Prognosen lassen sich direkt auswerten:
+Die öffentliche Ergebnisseite (`App\Livewire\Results`, Route `/ergebnisse`) bündelt die Aggregation bereits. Nach Ablauf der Deadline (`config('forecast.edit_deadline')`) leitet die Startseite automatisch dorthin weiter.
+
+Für manuelle Abfragen per Tinker:
 
 ```php
-// Durchschnittliche Sitzverteilung über alle Prognosen
+// Durchschnittliche Sitzverteilung über alle echten Prognosen
 $averageSeats = ForecastSeat::select('party_id', DB::raw('AVG(seats) as avg_seats'))
+    ->whereHas('forecast', fn ($q) => $q->where('is_fake', false))
     ->groupBy('party_id')
     ->with('party')
     ->get();
 
 // Häufigste Bürgermeister-Wahl
-$mayorVotes = Forecast::whereNotNull('mayor_candidate_1_id')
+$mayorVotes = Forecast::scopeReal(Forecast::query())
+    ->whereNotNull('mayor_candidate_1_id')
     ->select('mayor_candidate_1_id', DB::raw('COUNT(*) as votes'))
     ->groupBy('mayor_candidate_1_id')
     ->with('mayorCandidate1.party')
     ->orderByDesc('votes')
     ->get();
-
-// Anzahl der Stichwahl-Prognosen
-$runoffCount = Forecast::whereNotNull('mayor_candidate_2_id')->count();
 ```
 
-Für eine öffentliche Ergebnisseite bietet sich ein weiteres Livewire-Component an, das diese Abfragen bündelt und regelmäßig aktualisiert.
+Test-/Demo-Einträge mit `is_fake = true` markieren, damit sie aus Auswertungen gefiltert werden:
+
+```php
+Forecast::where('pseudonym', 'Test')->update(['is_fake' => true]);
+```
 
 ---
 
@@ -117,6 +122,21 @@ if (! Auth::check()) {
 **Option 2 — Login Pflicht:**
 
 Route mit `->middleware('auth')` schützen und Gäste zur Registrierung weiterleiten.
+
+---
+
+## CSV-Export (Admin)
+
+Der CSV-Export steht nur Nutzern mit `is_admin = true` zur Verfügung (Route `/dashboard/export`). Der Download-Button erscheint im Dashboard oben rechts.
+
+Admin-Rechte vergeben:
+
+```bash
+php artisan tinker
+>>> \App\Models\User::where('email', 'mail@example.com')->update(['is_admin' => true]);
+```
+
+Der Export enthält alle Prognosen inkl. Userdaten (Name, E-Mail bei registrierten Nutzern). Die Spalten für Partei-Sitze werden dynamisch aus der `parties`-Tabelle generiert — passen sich also automatisch an, falls Parteien hinzugefügt oder entfernt werden.
 
 ---
 
