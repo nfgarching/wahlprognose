@@ -1,13 +1,102 @@
 <div class="flex flex-col gap-6">
 
     {{-- Header --}}
-    <div class="flex items-center justify-between gap-3 flex-wrap">
+    <div>
+        <h1 class="text-xl font-bold text-slate-900 dark:text-white">Stadtratswahl Stadt Garching b. München &mdash; Ergebnisse 2026</h1>
+    </div>
 
-        <div>
-            <h1 class="text-xl font-bold text-slate-900 dark:text-white">Prognose-Ergebnisse</h1>
-            <p class="text-sm text-slate-500 mt-0.5">Inoffizielle Bürgerschätzung zur Kommunalwahl Garching 2026</p>
+    {{-- Offizielles Endergebnis --}}
+    <div class="rounded-2xl border border-emerald-200 shadow-sm overflow-hidden">
+
+        <div class="px-6 py-4 bg-emerald-600 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+            </div>
+            <div>
+                <p class="text-emerald-100 text-xs">Kommunalwahl Garching &mdash; 8. März 2026</p>
+            </div>
         </div>
 
+        <div class="bg-white divide-y divide-slate-100">
+
+            {{-- Bürgermeisterwahl --}}
+            <div class="px-6 py-5">
+                <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Bürgermeisterwahl</h3>
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        Stichwahl am 22.03.2026<br><small>(Ausgang offen)</small>
+                    </span>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <div class="flex items-center gap-2.5 bg-slate-50 rounded-xl px-4 py-2.5 border border-slate-200">
+                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background-color: #E3000F"></div>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-800">Dr. Dietmar Gruchmann</div>
+                            <div class="text-xs font-medium" style="color: #E3000F">SPD</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center text-slate-400 text-xs font-semibold px-1">vs.</div>
+                    <div class="flex items-center gap-2.5 bg-slate-50 rounded-xl px-4 py-2.5 border border-slate-200">
+                        <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background-color: #0066B3"></div>
+                        <div>
+                            <div class="text-sm font-semibold text-slate-800">Thomas Lemke</div>
+                            <div class="text-xs font-medium" style="color: #0066B3">CSU</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Stadtratswahl --}}
+            <div class="px-6 py-5">
+                <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Stadtrat &mdash; Sitzverteilung (24 Sitze)</h3>
+                @php
+                    $officialSeats = [
+                        ['short' => 'CSU',   'seats' => 7, 'color' => '#0066B3'],
+                        ['short' => 'SPD',   'seats' => 5, 'color' => '#E3000F'],
+                        ['short' => 'GRÜNE', 'seats' => 5, 'color' => '#46962B'],
+                        ['short' => 'UG',    'seats' => 3, 'color' => '#7C3AED'],
+                        ['short' => 'BfG',   'seats' => 3, 'color' => '#0891B2'],
+                        ['short' => 'FDP',   'seats' => 1, 'color' => '#F9A825'],
+                    ];
+                @endphp
+                <div class="space-y-2 mb-4">
+                    @foreach ($officialSeats as $p)
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 flex-shrink-0 text-right">
+                                <span class="text-xs font-bold" style="color: {{ $p['color'] }}">{{ $p['short'] }}</span>
+                            </div>
+                            <div class="flex-1 h-5 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full rounded-full" style="width: {{ round(($p['seats'] / 7) * 100) }}%; background-color: {{ $p['color'] }}"></div>
+                            </div>
+                            <div class="w-16 flex-shrink-0 text-xs tabular-nums">
+                                <span class="font-bold text-slate-700">{{ $p['seats'] }}</span>
+                                <span class="text-slate-400 ml-1">Sitze</span>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="flex h-6 rounded-full overflow-hidden gap-px">
+                    @foreach ($officialSeats as $p)
+                        <div class="h-full" style="flex: {{ $p['seats'] }}; background-color: {{ $p['color'] }}" title="{{ $p['short'] }}: {{ $p['seats'] }} Sitze"></div>
+                    @endforeach
+                </div>
+                <div class="flex flex-wrap gap-x-4 gap-y-1 mt-2">
+                    @foreach ($officialSeats as $p)
+                        <span class="flex items-center gap-1 text-xs text-slate-600">
+                            <span class="w-2.5 h-2.5 rounded-sm flex-shrink-0" style="background-color: {{ $p['color'] }}"></span>
+                            {{ $p['short'] }} {{ $p['seats'] }}
+                        </span>
+                    @endforeach
+                </div>
+            </div>
+
+        </div>
     </div>
 
     @if ($this->forecastCount === 0)
@@ -33,8 +122,8 @@
                     </svg>
                 </div>
                 <div>
-                    <h2 class="font-semibold text-slate-900">Gesamtübersicht aller Prognosen</h2>
-                    <p class="text-xs text-slate-400">{{ $this->forecastCount }}
+                    <h2 class="font-semibold text-slate-900">Prognose-Ergebnisse</h2>
+                    <p class="text-xs text-slate-400">Inoffizielle Bürgerschätzung zur Kommunalwahl Garching 2026 &mdash; {{ $this->forecastCount }}
                         {{ $this->forecastCount === 1 ? 'Prognose' : 'Prognosen' }} abgegeben</p>
                 </div>
             </div>
@@ -164,35 +253,7 @@
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col gap-6">
 
         {{-- Links --}}
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            @if (Auth::check())
-                <a href="{{ route('dashboard') }}"
-                    class="flex items-center justify-center gap-2 px-4 py-3 bg-blue-700 text-white font-semibold rounded-xl hover:bg-blue-800 transition-colors">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                    </svg>
-                    Zum Dashboard
-                </a>
-            @elseif ($this->deadlinePassed)
-                <a href="https://wahlen-garching.de/" target="_blank" rel="noopener noreferrer"
-                    class="flex items-center justify-center gap-2 px-4 py-3 bg-blue-700 text-white font-semibold rounded-xl hover:bg-blue-800 transition-colors">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
-                    </svg>
-                    Zu den Wahlergebnissen
-                </a>
-            @else
-                <a href="{{ route('home') }}"
-                    class="flex items-center justify-center gap-2 px-4 py-3 bg-blue-700 text-white font-semibold rounded-xl hover:bg-blue-800 transition-colors">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                    </svg>
-                    Zur Startseite
-                </a>
-            @endif
+        <div class="flex justify-center gap-3">
             <a href="https://www.buerger-fuer-garching.de" target="_blank" rel="noopener noreferrer"
                 class="flex items-center justify-center gap-2 px-4 py-3 border border-slate-300 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition-colors">
                 <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">

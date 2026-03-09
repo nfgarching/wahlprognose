@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ForecastExportController;
 use App\Livewire\Admin\Forecasts as AdminForecasts;
+use App\Livewire\Admin\Ranking as AdminRanking;
 use App\Livewire\Dashboard;
 use App\Livewire\ForecastForm;
 use App\Livewire\Results;
@@ -9,11 +10,12 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    if (now()->gt(Carbon::parse(config('forecast.edit_deadline')))) {
-        return redirect()->route('results');
-    }
+    //    if (now()->gt(Carbon::parse(config('forecast.edit_deadline')))) {
+    //        return redirect()->route('results');
+    //    }
 
-    return view('welcome');
+    return redirect()->route('results');
+    //  return view('results');
 })->name('home');
 
 Route::livewire('/prognose', ForecastForm::class)->name('prognose');
@@ -34,5 +36,9 @@ Route::get('/dashboard/export', ForecastExportController::class)
 Route::livewire('/admin/prognosen', AdminForecasts::class)
     ->middleware(['auth', 'verified'])
     ->name('admin.forecasts');
+
+Route::livewire('/admin/ranking', AdminRanking::class)
+    ->middleware(['auth', 'verified'])
+    ->name('admin.ranking');
 
 require __DIR__.'/settings.php';

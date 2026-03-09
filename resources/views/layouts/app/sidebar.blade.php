@@ -32,6 +32,9 @@
                     <flux:sidebar.item icon="shield-check" :href="route('admin.forecasts')" :current="request()->routeIs('admin.forecasts')" wire:navigate>
                         Prognosen
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="shield-check" :href="route('admin.ranking')" :current="request()->routeIs('admin.ranking')" wire:navigate>
+                        Ranking
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
         @endif
