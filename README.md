@@ -1,58 +1,68 @@
 # Wahlprognose Garching 2026
 
-Interaktives Bürgerprognosetool für die **Kommunalwahl Garching bei München am 15. März 2026**.
+> **Entstehungsgeschichte:** Dieses Projekt wurde von Norbert Fröhler (kein professioneller Programmierer) mithilfe von **Claude Code** (Anthropic) in ca. **5 Stunden** entwickelt. Claude Code ist ein KI-gestützter Coding-Assistent, der direkt im Terminal läuft und Dateien lesen, schreiben und ausführen kann. Ohne dieses Tool wäre die Umsetzung in dieser Zeit und Qualität nicht möglich gewesen. Verwendete Version: **Claude Sonnet 4.6** — eingesetzt für Architekturentscheidungen, Code-Generierung, Datenbankdesign, Blade-Views, Livewire-Komponenten, Tests und diese Dokumentation.
 
-Besucher können ohne Registrierung ihre persönliche Einschätzung zur Bürgermeisterwahl und zur Sitzverteilung im Stadtrat abgeben. Registrierte Nutzer können ihre Prognose bis zum **7. März 2026** jederzeit anpassen.
+> [!NOTE]
+> **Die Live-Version unter `wahlprognose.buerger-fuer-garching.de` ist nach der Kommunalwahl 2026 abgeschaltet worden.**
+> Dieses Repository dient als **Demonstrationsversion** und Vorlage für künftige Wahljahre. Der Code kann als Basis für ein neues Wahlprognose-Projekt zur nächsten Kommunalwahl wiederverwendet werden.
+
+---
+
+Inoffizielle Bürgerschätzung zur Kommunalwahl Garching bei München am **8. März 2026**.
+
+Bürgerinnen und Bürger können vor der Wahl ihre persönliche Einschätzung zur Sitzverteilung im Stadtrat und zur Bürgermeisterwahl abgeben. Nach Ablauf der Abgabefrist werden die aggregierten Prognosen öffentlich sichtbar.
+
+---
+
+## Screenshots
+
+| Startseite mit Countdown | Prognose-Formular |
+| --- | --- |
+| ![Startseite](docs/screenshots/startseite.png) | ![Prognose-Formular](docs/screenshots/prognose.png) |
 
 ---
 
 ## Features
 
-- **Bürgermeisterwahl** — Auswahl von 1 Kandidaten (Direktsieg) oder 2 Kandidaten (Stichwahl-Prognose), mit optionaler Angabe des Stichwahl-Gewinners
-- **Stadtratswahl** — Verteilung von genau 24 Sitzen auf 6 Parteien über +/−-Buttons; Sitz-Counter aktualisiert sich sofort via Alpine.js
-- **Keine Pflichtregistrierung** — Pseudonym genügt zum Abgeben einer Prognose
-- **Bearbeitungsfenster** — Registrierte Nutzer können bis 07.03.2026 ihre Prognose ändern
-- **Visuelle Auswertung** — Fortschrittsbalken pro Partei und gestapelter Gesamtbalken
+- **Bürgermeisterwahl** — 1 Kandidat (Direktsieg) oder 2 Kandidaten (Stichwahl), optionaler Stichwahl-Favorit
+- **Stadtratswahl** — Verteilung von genau 24 Sitzen auf 6 Parteien; Counter aktualisiert sich sofort via Alpine.js
+- **Keine Pflichtregistrierung** — Pseudonym genügt für eine anonyme Prognose
+- **Bearbeitungsfenster** — Registrierte Nutzer können bis zur Deadline ihre Prognose anpassen
+- **Ergebnisseite** — Aggregierte Auswertung nach Ablauf der Abgabefrist
+- **Admin-Bereich** — Prognosen-Übersicht und CSV-Export für Admins
 
 ## Tech-Stack
 
-| Schicht      | Technologie                          |
-|--------------|--------------------------------------|
-| Backend      | PHP 8.2+, Laravel 12                 |
-| Reaktivität  | Livewire 4, Alpine.js                |
-| UI-Komponenten | Flux UI v2                         |
-| Styling      | Tailwind CSS v4                      |
-| Build        | Vite 7                               |
-| Auth         | Laravel Fortify (2FA-fähig)          |
-| Datenbank    | SQLite (Dev) / MySQL, PostgreSQL (Prod) |
-| Tests        | Pest v4                              |
+| Schicht | Technologie |
+|---|---|
+| Backend | PHP 8.4, Laravel 12 |
+| Reaktivität | Livewire 4, Alpine.js |
+| UI-Komponenten | Flux UI v2 |
+| Styling | Tailwind CSS v4 |
+| Build | Vite 7 |
+| Auth | Laravel Fortify (2FA-fähig) |
+| Datenbank | SQLite (Dev) / MySQL (Prod) |
+| Tests | Pest v4 |
 
 ---
 
 ## Schnellstart
 
-### Erstmalige Einrichtung
-
 ```bash
-composer setup
-```
+# Abhängigkeiten installieren
+composer install && npm install
 
-Dieser Befehl führt aus: `composer install` → `.env` anlegen → `key:generate` → `migrate` → `npm install` → `npm run build`.
+# Umgebung konfigurieren
+cp .env.example .env
+php artisan key:generate
 
-Danach Stammdaten einspielen:
+# Datenbank vorbereiten
+php artisan migrate
+php artisan db:seed
 
-```bash
-php artisan db:seed --class=PartySeeder
-php artisan db:seed --class=CandidateSeeder
-```
-
-### Entwicklungsserver starten
-
-```bash
+# Entwicklungsserver starten (artisan + queue + pail + vite)
 composer dev
 ```
-
-Startet parallel: PHP-Dev-Server, Queue-Worker, Pail (Logs) und Vite. Die Anwendung ist unter `http://localhost:8000` erreichbar.
 
 ---
 
@@ -61,44 +71,81 @@ Startet parallel: PHP-Dev-Server, Queue-Worker, Pail (Logs) und Vite. Die Anwend
 | Befehl | Beschreibung |
 |---|---|
 | `composer dev` | Vollständige Dev-Umgebung starten |
-| `composer test` | Testsuite ausführen (inkl. Lint-Check) |
+| `composer test` | Testsuite ausführen (config:clear → pint → artisan test) |
 | `composer lint` | Code-Stil automatisch korrigieren (Pint) |
 | `npm run build` | Frontend-Assets für Produktion bauen |
 | `php artisan migrate` | Datenbankmigrationen ausführen |
-| `php artisan db:seed --class=PartySeeder` | Parteien einspielen |
-| `php artisan db:seed --class=CandidateSeeder` | Kandidaten einspielen |
+| `php artisan db:seed` | Parteien + Kandidaten einspielen |
 | `php artisan test --filter=TestName` | Einzelnen Test ausführen |
 
 ---
 
 ## Routen
 
-| URL | Route-Name | Sichtbarkeit |
+| URL | Beschreibung | Auth |
 |---|---|---|
-| `/` | `home` | öffentlich |
-| `/prognose` | `forecast` | öffentlich |
-| `/dashboard` | `dashboard` | nur eingeloggt + verifiziert |
-| `/settings/profile` | `profile.edit` | nur eingeloggt |
-| `/settings/password` | `user-password.edit` | nur eingeloggt + verifiziert |
+| `/` | Startseite mit Countdown; leitet nach Deadline auf `/ergebnisse` weiter | — |
+| `/prognose` | Prognose-Formular (Gäste + Nutzer) | — |
+| `/ergebnisse` | Aggregierte Ergebnisseite aller Prognosen | — |
+| `/datenschutz` | Datenschutzerklärung | — |
+| `/impressum` | Impressum | — |
+| `/dashboard` | Persönliches Dashboard + Gesamtübersicht | auth |
+| `/dashboard/export` | CSV-Export aller Prognosen (inkl. Userdaten) | auth + admin |
+| `/admin/prognosen` | Admin-Übersicht aller Prognosen | auth |
+| `/settings/*` | Profil, Passwort, Erscheinungsbild, 2FA | auth |
 
 ---
 
-## Kandidaten (Bürgermeisterwahl)
+## Benutzerrollen
 
-| Kandidat | Partei |
-|---|---|
-| Dr. Dietmar Gruchmann | SPD |
-| Thomas Lemke | CSU |
-| Werner Landmann | GRÜNE |
-| Christian Nolte | UG |
-| Simone Schmidt | BfG |
-| Bastian Dombret | FDP |
+| Rolle | Kennzeichen | Fähigkeiten |
+|---|---|---|
+| Gast | nicht eingeloggt | Prognose abgeben (kein nachträgliches Update) |
+| Nutzer | `is_admin = false` | Prognose abgeben + bis Deadline bearbeiten, Dashboard einsehen |
+| Admin | `is_admin = true` | Alles + CSV-Export, Admin-Prognosen-Übersicht |
+
+Admin-Rechte vergeben:
+
+```bash
+php artisan tinker
+>>> \App\Models\User::where('email', 'mail@example.com')->update(['is_admin' => true]);
+```
+
+---
+
+## Konfiguration
+
+Die Abgabe-Deadline wird über `config/forecast.php` → Key `edit_deadline` gesteuert. Standard: `2026-03-07 23:59:59`.
+
+Nach Ablauf der Deadline:
+
+- Startseite (`/`) leitet automatisch auf `/ergebnisse` weiter
+- Das Prognose-Formular wird read-only (kein Submit-Button)
+- Der Countdown auf der Startseite zeigt "Prognosephase abgelaufen"
 
 ---
 
 ## Weiterführende Dokumentation
 
-- [Datenmodell](docs/datenmodell.md) — ER-Diagramm, Tabellenbeschreibungen, Constraints
-- [Livewire-Komponente](docs/komponenten.md) — Aufbau, Properties, Methoden, Alpine.js-Integration
-- [Benutzerflüsse](docs/benutzerfluss.md) — Gast vs. registrierter Nutzer, Deadline-Logik, Validierungsregeln
-- [Erweiterungsguide](docs/erweiterung.md) — Fotos hochladen, Ergebnisauswertung, neue Wahlen hinzufügen
+| Datei | Inhalt |
+|---|---|
+| [docs/datenmodell.md](docs/datenmodell.md) | ER-Diagramm, Tabellenbeschreibungen, Eloquent-Relations, Seeder |
+| [docs/komponenten.md](docs/komponenten.md) | Alle Livewire-Komponenten und Controller im Detail |
+| [docs/benutzerfluss.md](docs/benutzerfluss.md) | Gast vs. Nutzer, Deadline-Logik, Validierung |
+| [docs/erweiterung.md](docs/erweiterung.md) | Erweiterungsguide: Fotos, Admin, CSV-Export, neue Wahlen |
+| [docs/vserver.md](docs/vserver.md) | Produktions-Deployment auf Strato VServer (Ubuntu + Nginx + MySQL) |
+
+---
+
+## Deployment (Kurzform)
+
+Vollständige Anleitung: [docs/vserver.md](docs/vserver.md)
+
+```bash
+# Auf dem Server nach git pull:
+composer install --no-dev --optimize-autoloader
+npm run build
+php artisan migrate --force
+php artisan config:cache
+php artisan route:cache
+```

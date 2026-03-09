@@ -2,7 +2,7 @@
 
 ## Übersicht: Gast vs. registrierter Nutzer
 
-```
+```text
 Nutzer besucht /prognose
         │
         ├── Gast (nicht eingeloggt)
@@ -36,7 +36,7 @@ Nutzer besucht /prognose
 ## Validierungsregeln (server-seitig, `submit()`)
 
 | Feld | Regel | Fehlermeldung |
-|---|---|---|
+| --- | --- | --- |
 | `pseudonym` | required, max:50 | "Bitte gib ein Pseudonym an." |
 | `selectedMayorCandidates` | required, array, min:1, max:2 | "Bitte wähle mindestens einen Bürgermeisterkandidaten." |
 | `seatDistribution` | required, array, Summe = 24 | "Die Sitzverteilung muss genau 24 Sitze ergeben." |
@@ -46,6 +46,7 @@ Zusätzlich prüft `submit()` die Deadline über `$this->canEdit`. Bei Verstoß 
 ### Client-seitige Vorab-Validierung (Alpine.js + Livewire)
 
 Der Submit-Button hat `@disabled(...)` und ist deaktiviert, solange:
+
 - `$pseudonym` leer ist
 - weniger als 1 Kandidat ausgewählt ist
 - `$this->remainingSeats !== 0`
@@ -56,10 +57,10 @@ Dies verhindert unnötige Server-Requests, ersetzt aber nicht die server-seitige
 
 ## Deadline-Verhalten im Detail
 
-**Konstante:** `ForecastForm::EDIT_DEADLINE = '2026-03-07 23:59:59'`
+**Konfiguration:** `config('forecast.edit_deadline')` (Standard: `2026-03-07 23:59:59`)
 
 | Zustand | `canEdit` | `deadlinePassed` | Ergebnis |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Keine bestehende Prognose | `true` | `false` | Formular aktiv |
 | Bestehende Prognose, vor Deadline, eingeloggt | `true` | `false` | Formular editierbar, "Prognose aktualisieren" |
 | Bestehende Prognose, nach Deadline, eingeloggt | `false` | `true` | Formular read-only, Amber-Hinweistext |
@@ -69,7 +70,7 @@ Dies verhindert unnötige Server-Requests, ersetzt aber nicht die server-seitige
 
 ## Stichwahl-Logik
 
-```
+```text
 1 Kandidat gewählt  →  Prognose: Direktsieg
                         mayor_candidate_1_id = X
                         mayor_candidate_2_id = null
@@ -87,7 +88,7 @@ Das Stichwahl-Panel erscheint automatisch wenn `hasRunoff === true`. Es kann dur
 
 ## Sitzverteilungs-Flow
 
-```
+```text
 mount()
   └── seatDistribution = { party_1: 0, party_2: 0, ..., party_6: 0 }
 
@@ -114,7 +115,7 @@ User klickt Abgeben (submit)
 ## Flash-Zustände im UI
 
 | Situation | Anzeige |
-|---|---|
+| --- | --- |
 | Erfolgreiche Speicherung | Grünes Banner "Deine Prognose wurde gespeichert!" |
 | Gast nach Speicherung | Hinweis auf Registrierung für spätere Bearbeitung |
 | Eingeloggter Nutzer nach Speicherung, vor Deadline | Hinweis "Du kannst sie bis zum 07.03.2026 noch ändern." |
