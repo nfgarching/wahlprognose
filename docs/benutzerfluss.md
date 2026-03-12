@@ -112,6 +112,39 @@ User klickt Abgeben (submit)
 
 ---
 
+---
+
+## Stichwahl-Seite (`/stichwahl`)
+
+Die Stichwahl-Prognose ist ein eigenständiges Formular — unabhängig von der Erst-Wahlprognose unter `/prognose`.
+
+```text
+Nutzer besucht /stichwahl
+        │
+        ├── Gast (nicht eingeloggt)
+        │       ├── Pseudonym eingeben
+        │       ├── Gewinner wählen (Gruchmann | Lemke)
+        │       ├── Optionaler Stimmenanteil für Gruchmann (0–100 %)
+        │       └── Abgeben → neuer RunoffForecast-Eintrag
+        │               └── Kein Update möglich (keine Identität)
+        │
+        └── Registrierter Nutzer (eingeloggt)
+                ├── mount() lädt bestehende Stichwahl-Prognose (falls vorhanden)
+                └── Abgeben → updateOrCreate(['user_id' => ...])
+```
+
+Nach dem Absenden erscheint direkt die **Live-Statistik** aller bisher abgegebenen Stichwahl-Prognosen (Gruchmann vs. Lemke in Prozent, Ø-Stimmenanteil Gruchmann).
+
+### Validierungsregeln (server-seitig)
+
+| Feld | Regel | Fehlermeldung |
+| --- | --- | --- |
+| `pseudonym` | required, max:50 | "Bitte gib ein Pseudonym an." |
+| `predictedWinner` | required, in:gruchmann,lemke | "Bitte wähle einen Kandidaten aus." |
+| `gruchmannPercent` | nullable, integer, 0–100 | "Der Wert muss zwischen 0 und 100 liegen." |
+
+---
+
 ## Flash-Zustände im UI
 
 | Situation | Anzeige |

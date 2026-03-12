@@ -26,6 +26,7 @@ Bürgerinnen und Bürger können vor der Wahl ihre persönliche Einschätzung zu
 
 - **Bürgermeisterwahl** — 1 Kandidat (Direktsieg) oder 2 Kandidaten (Stichwahl), optionaler Stichwahl-Favorit
 - **Stadtratswahl** — Verteilung von genau 24 Sitzen auf 6 Parteien; Counter aktualisiert sich sofort via Alpine.js
+- **Stichwahl-Prognose** — Eigene Seite (`/stichwahl`) für die Bürgermeister-Stichwahl: Gewinner-Tipp + optionaler Stimmenanteil für Gruchmann; Live-Statistik direkt auf der Seite
 - **Keine Pflichtregistrierung** — Pseudonym genügt für eine anonyme Prognose
 - **Bearbeitungsfenster** — Registrierte Nutzer können bis zur Deadline ihre Prognose anpassen
 - **Ergebnisseite** — Aggregierte Auswertung nach Ablauf der Abgabefrist
@@ -86,6 +87,7 @@ composer dev
 |---|---|---|
 | `/` | Startseite mit Countdown; leitet nach Deadline auf `/ergebnisse` weiter | — |
 | `/prognose` | Prognose-Formular (Gäste + Nutzer) | — |
+| `/stichwahl` | Stichwahl-Prognose: Gewinner-Tipp + optionaler Stimmenanteil, inkl. Live-Statistik | — |
 | `/ergebnisse` | Aggregierte Ergebnisseite aller Prognosen | — |
 | `/datenschutz` | Datenschutzerklärung | — |
 | `/impressum` | Impressum | — |
