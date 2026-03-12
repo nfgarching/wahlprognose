@@ -26,16 +26,39 @@
             </flux:sidebar.group>
         </flux:sidebar.nav>
 
-        @if(auth()->user()?->is_admin)
+        @if (auth()->user()?->is_admin)
             <flux:sidebar.nav>
+
                 <flux:sidebar.group :heading="__('Admin')" class="grid">
-                    <flux:sidebar.item icon="shield-check" :href="route('admin.forecasts')" :current="request()->routeIs('admin.forecasts')" wire:navigate>
+                    <flux:sidebar.item icon="shield-check" :href="route('results')"
+                        :current="request()->routeIs('results')" wire:navigate>
+                        Ergebnisse
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="shield-check" :href="route('admin.forecasts')"
+                        :current="request()->routeIs('admin.forecasts')" wire:navigate>
                         Prognosen
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="shield-check" :href="route('admin.ranking')" :current="request()->routeIs('admin.ranking')" wire:navigate>
+                    <flux:sidebar.item icon="shield-check" :href="route('admin.ranking')"
+                        :current="request()->routeIs('admin.ranking')" wire:navigate>
                         Ranking
                     </flux:sidebar.item>
                 </flux:sidebar.group>
+
+                <flux:sidebar.group :heading="__('Stichwahl')" class="grid">
+                    <flux:sidebar.item icon="shield-check" :href="route('stichwahl')"
+                        :current="request()->routeIs('stichwahl')" wire:navigate>
+                        Stichwahl
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="shield-check" :href="route('admin.forecasts')"
+                        :current="request()->routeIs('admin.forecasts')" wire:navigate>
+                        Prognosen
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="shield-check" :href="route('admin.ranking')"
+                        :current="request()->routeIs('admin.ranking')" wire:navigate>
+                        Ranking
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
+
             </flux:sidebar.nav>
         @endif
 
@@ -45,33 +68,27 @@
 
             <flux:sidebar.group :heading="__('Links zu den Garchinger Parteien')" class="grid">
 
-                <flux:sidebar.item icon="folder-git-2" href="https://www.buerger-fuer-garching.de/"
-                    target="_blank">
+                <flux:sidebar.item icon="folder-git-2" href="https://www.buerger-fuer-garching.de/" target="_blank">
                     {{ __('Bürger für Garching (BfG)') }}
                 </flux:sidebar.item>
 
-                <flux:sidebar.item icon="folder-git-2" href="https://www.csu.de/verbaende/ov/garching/"
-                    target="_blank">
+                <flux:sidebar.item icon="folder-git-2" href="https://www.csu.de/verbaende/ov/garching/" target="_blank">
                     {{ __('CSU') }}
                 </flux:sidebar.item>
 
-                <flux:sidebar.item icon="folder-git-2" href="https://www.fdp-garching.de/"
-                    target="_blank">
+                <flux:sidebar.item icon="folder-git-2" href="https://www.fdp-garching.de/" target="_blank">
                     {{ __('FDP') }}
                 </flux:sidebar.item>
 
-                <flux:sidebar.item icon="folder-git-2" href="https://www.unabhaengige-garchinger.de/"
-                    target="_blank">
+                <flux:sidebar.item icon="folder-git-2" href="https://www.unabhaengige-garchinger.de/" target="_blank">
                     {{ __('Freie Wähler (Unabhängige)') }}
                 </flux:sidebar.item>
 
-                <flux:sidebar.item icon="folder-git-2" href="https://gruene-garching.de/"
-                    target="_blank">
+                <flux:sidebar.item icon="folder-git-2" href="https://gruene-garching.de/" target="_blank">
                     {{ __('Grüne') }}
                 </flux:sidebar.item>
 
-                <flux:sidebar.item icon="folder-git-2" href="https://www.spd-garching.de/"
-                    target="_blank">
+                <flux:sidebar.item icon="folder-git-2" href="https://www.spd-garching.de/" target="_blank">
                     {{ __('SPD') }}
                 </flux:sidebar.item>
 

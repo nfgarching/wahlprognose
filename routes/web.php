@@ -6,6 +6,7 @@ use App\Livewire\Admin\Ranking as AdminRanking;
 use App\Livewire\Dashboard;
 use App\Livewire\ForecastForm;
 use App\Livewire\Results;
+use App\Livewire\RunoffForecastForm;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
@@ -14,11 +15,13 @@ Route::get('/', function () {
     //        return redirect()->route('results');
     //    }
 
-    return redirect()->route('results');
-    //  return view('results');
+    // return redirect()->route('results');
+    return view('welcome_2');
 })->name('home');
 
 Route::livewire('/prognose', ForecastForm::class)->name('prognose');
+
+Route::livewire('/stichwahl', RunoffForecastForm::class)->name('stichwahl');
 
 Route::livewire('/ergebnisse', Results::class)->name('results');
 
