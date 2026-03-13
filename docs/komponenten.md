@@ -5,6 +5,7 @@
 | Klasse | Route | Auth | Beschreibung |
 | --- | --- | --- | --- |
 | `App\Livewire\ForecastForm` | `/prognose` | — | Prognose-Formular für Gäste und Nutzer |
+| `App\Livewire\RunoffForecastForm` | `/stichwahl` | — | Stichwahl-Prognose: Gewinner-Tipp + optionaler Stimmenanteil, Live-Statistik |
 | `App\Livewire\Dashboard` | `/dashboard` | auth | Persönliches Dashboard + Gesamtübersicht |
 | `App\Livewire\Results` | `/ergebnisse` | — | Öffentliche Ergebnisseite nach Deadline |
 | `App\Livewire\Admin\Forecasts` | `/admin/prognosen` | auth | Admin-Übersicht aller Prognosen |
@@ -74,6 +75,60 @@ Schritt 3 — Stadtratswahl      x-data Alpine-Wrapper
             ├ Partei-Zeilen    wire:click → increment/decrementSeats()
             └ Gesamtbalken     PHP-Berechnung (nach Livewire-Response)
 Abschnitt  — Submit            Checkliste + wire:click → submit()
+```
+
+---
+
+## RunoffForecastForm
+
+**Klasse:** `App\Livewire\RunoffForecastForm`
+**View:** `resources/views/livewire/runoff-forecast-form.blade.php`
+**Route:** `GET /stichwahl` → `stichwahl`
+**Layout:** `layouts.public`
+
+Eigenständiges Formular für die Bürgermeister-Stichwahl — unabhängig vom Erst-Wahlformular. Zeigt nach dem Absenden live die aggregierte Statistik aller bisherigen Prognosen.
+
+### Public Properties (Livewire-State)
+
+| Property | Typ | Beschreibung |
+| --- | --- | --- |
+| `$pseudonym` | `string` | Anzeigename |
+| `$predictedWinner` | `string` | `'gruchmann'` oder `'lemke'` |
+| `$gruchmannPercent` | `?int` | Optionaler Stimmenanteil für Gruchmann (0–100) |
+| `$saved` | `bool` | Steuert die Erfolgs-Banner-Anzeige |
+| `$existingForecastId` | `?int` | ID einer vorhandenen Prognose (nur für eingeloggte Nutzer) |
+
+### Computed Properties (`#[Computed]`)
+
+| Property | Rückgabe | Beschreibung |
+| --- | --- | --- |
+| `statistics()` | `array` | Aggregierte Live-Statistik: Gesamtanzahl, Gruchmann/Lemke-Zahl + %-Anteil, Durchschnitt `gruchmann_percent` |
+
+`statistics()` gibt zurück:
+
+```php
+[
+    'total'                 => int,
+    'gruchmann'             => int,
+    'lemke'                 => int,
+    'gruchmann_pct'         => float,   // gerundet auf 1 Stelle
+    'lemke_pct'             => float,
+    'avg_gruchmann_percent' => float|null,
+]
+```
+
+### Methoden
+
+**`mount(): void`** — Lädt bestehende Stichwahl-Prognose des eingeloggten Nutzers vor.
+
+**`submit(): void`** — Validiert und speichert. Eingeloggte Nutzer per `updateOrCreate(['user_id' => ...])`, Gäste per `create()`.
+
+Validierungsregeln:
+
+```text
+pseudonym        → required, string, max:50
+predictedWinner  → required, in:gruchmann,lemke
+gruchmannPercent → nullable, integer, min:0, max:100
 ```
 
 ---

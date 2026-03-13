@@ -23,6 +23,16 @@ parties ──────────────┐                           
                       └──────────────────────────── party_id
                                                      forecast_id ─────────→ forecasts.id
                                                      seats (0–24)
+
+users ──────────────────────────────────────────────────────┐
+  id, name, email, password, ...                             │ 0..1
+                                                   runoff_forecasts
+                                                     id
+                                                     user_id ───────────────┘ (nullable)
+                                                     ip_address
+                                                     pseudonym
+                                                     predicted_winner  ('gruchmann'|'lemke')
+                                                     gruchmann_percent (0–100, nullable)
 ```
 
 ---
@@ -87,6 +97,21 @@ Sitzverteilungs-Details zu einer Prognose. Genau ein Eintrag pro Partei pro Prog
 
 **Invariante:** Die Summe aller `seats` innerhalb einer `forecast_id` muss genau **24** ergeben (wird serverseitig durch Livewire-Validierung sichergestellt, nicht durch DB-Constraint).
 
+### `runoff_forecasts`
+
+Prognosen zur Bürgermeister-Stichwahl. Unabhängig von der `forecasts`-Tabelle — eigene Seite, eigenes Formular.
+
+| Spalte | Typ | Beschreibung |
+|---|---|---|
+| `id` | bigint PK | |
+| `user_id` | bigint FK nullable | → `users.id`, `SET NULL` bei Löschung; `null` = Gast |
+| `ip_address` | string(45) | IPv4 oder IPv6 |
+| `pseudonym` | string(50) | Anzeigename |
+| `predicted_winner` | string | `'gruchmann'` oder `'lemke'` |
+| `gruchmann_percent` | tinyint unsigned nullable | Optionale Prognose: Stimmenanteil für Gruchmann (0–100) |
+
+**Constraint-Logik:** Registrierte Nutzer haben genau einen Eintrag (via `updateOrCreate` auf `user_id`). Gäste können beliebig viele abgeben.
+
 ---
 
 ## Eloquent-Modelle und Relations
@@ -109,6 +134,9 @@ Forecast
 ForecastSeat
   belongsTo → Forecast
   belongsTo → Party
+
+RunoffForecast
+  belongsTo → User
 ```
 
 ---
