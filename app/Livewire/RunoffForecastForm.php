@@ -45,15 +45,15 @@ class RunoffForecastForm extends Component
         $this->validate([
             'pseudonym' => 'required|string|max:50',
             'predictedWinner' => 'required|in:gruchmann,lemke',
-            'gruchmannPercent' => 'nullable|integer|min:0|max:100',
+            'gruchmannPercent' => 'nullable|integer|min:51|max:100',
         ], [
             'pseudonym.required' => 'Bitte gib ein Pseudonym an.',
             'pseudonym.max' => 'Das Pseudonym darf maximal 50 Zeichen haben.',
             'predictedWinner.required' => 'Bitte wähle einen Kandidaten aus.',
             'predictedWinner.in' => 'Ungültige Auswahl.',
             'gruchmannPercent.integer' => 'Bitte gib eine ganze Zahl ein.',
-            'gruchmannPercent.min' => 'Der Wert muss zwischen 0 und 100 liegen.',
-            'gruchmannPercent.max' => 'Der Wert muss zwischen 0 und 100 liegen.',
+            'gruchmannPercent.min' => 'Der Gewinner muss mehr als 50 % erhalten.',
+            'gruchmannPercent.max' => 'Der Wert darf maximal 100 sein.',
         ]);
 
         $data = [

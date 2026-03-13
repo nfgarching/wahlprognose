@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Candidate;
 use App\Models\Forecast;
 use App\Models\Party;
+use App\Models\RunoffForecast;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
@@ -76,6 +77,33 @@ class Dashboard extends Component
 
             return $c;
         })->sortByDesc('selections')->values();
+    }
+
+    #[Computed]
+    public function runoffForecast(): ?RunoffForecast
+    {
+        return RunoffForecast::where('user_id', Auth::id())->first();
+    }
+
+    /**
+     * @return array{total: int, gruchmann: int, lemke: int, gruchmann_share: int, lemke_share: int, avg_gruchmann_percent: float|null}
+     */
+    #[Computed]
+    public function runoffStats(): array
+    {
+        $total = RunoffForecast::count();
+        $gruchmann = RunoffForecast::where('predicted_winner', 'gruchmann')->count();
+        $lemke = RunoffForecast::where('predicted_winner', 'lemke')->count();
+        $avg = RunoffForecast::whereNotNull('gruchmann_percent')->avg('gruchmann_percent');
+
+        return [
+            'total' => $total,
+            'gruchmann' => $gruchmann,
+            'lemke' => $lemke,
+            'gruchmann_share' => $total > 0 ? round($gruchmann / $total * 100) : 0,
+            'lemke_share' => $total > 0 ? round($lemke / $total * 100) : 0,
+            'avg_gruchmann_percent' => $avg !== null ? round($avg, 1) : null,
+        ];
     }
 
     public function render(): \Illuminate\View\View

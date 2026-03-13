@@ -6,9 +6,12 @@
 | --- | --- | --- | --- |
 | `App\Livewire\ForecastForm` | `/prognose` | — | Prognose-Formular für Gäste und Nutzer |
 | `App\Livewire\RunoffForecastForm` | `/stichwahl` | — | Stichwahl-Prognose: Gewinner-Tipp + optionaler Stimmenanteil, Live-Statistik |
-| `App\Livewire\Dashboard` | `/dashboard` | auth | Persönliches Dashboard + Gesamtübersicht |
+| `App\Livewire\Dashboard` | `/dashboard` | auth | Persönliches Dashboard: Hauptwahl-Prognose + Gesamtübersicht + Stichwahl-Statistik |
 | `App\Livewire\Results` | `/ergebnisse` | — | Öffentliche Ergebnisseite nach Deadline |
-| `App\Livewire\Admin\Forecasts` | `/admin/prognosen` | auth | Admin-Übersicht aller Prognosen |
+| `App\Livewire\Admin\Forecasts` | `/admin/prognosen` | auth + admin | Admin-Übersicht aller Hauptwahl-Prognosen |
+| `App\Livewire\Admin\Ranking` | `/admin/ranking` | auth + admin | Scoring und Ranking der Hauptwahl-Prognosen |
+| `App\Livewire\Admin\RunoffForecasts` | `/admin/stichwahl/prognosen` | auth + admin | Admin-Übersicht aller Stichwahl-Prognosen |
+| `App\Livewire\Admin\RunoffRanking` | `/admin/stichwahl/ranking` | auth + admin | Statistik + sortiertes Ranking der Stichwahl-Prognosen |
 | `App\Http\Controllers\ForecastExportController` | `/dashboard/export` | auth + admin | CSV-Download aller Prognosen |
 
 ---
@@ -128,8 +131,10 @@ Validierungsregeln:
 ```text
 pseudonym        → required, string, max:50
 predictedWinner  → required, in:gruchmann,lemke
-gruchmannPercent → nullable, integer, min:0, max:100
+gruchmannPercent → nullable, integer, min:51, max:100
 ```
+
+> **Hinweis `min:51`:** Der Stimmenanteil repräsentiert immer den Sieger-Anteil, der zwingend über 50 % liegen muss.
 
 ---
 
@@ -144,16 +149,19 @@ gruchmannPercent → nullable, integer, min:0, max:100
 
 | Property | Beschreibung |
 | --- | --- |
-| `forecast()` | Eigene Prognose des eingeloggten Nutzers, eager-loaded |
+| `forecast()` | Eigene Hauptwahl-Prognose des eingeloggten Nutzers, eager-loaded |
 | `parties()` | Alle Parteien |
-| `forecastCount()` | Anzahl aller Prognosen |
+| `forecastCount()` | Anzahl aller echten Hauptwahl-Prognosen |
 | `seatSummary()` | Parteien mit `withSum` + `withAvg` über `forecast_seats` |
 | `mayorSummary()` | Kandidaten mit Auswahlhäufigkeit und Stichwahl-Favoriten-Zahl |
+| `runoffForecast()` | Eigene Stichwahl-Prognose des eingeloggten Nutzers (`null` wenn keine) |
+| `runoffStats()` | Aggregierte Statistik aller Stichwahl-Prognosen: Anzahl + Anteil Gruchmann/Lemke, Ø Stimmenanteil |
 
 ### Funktionen
 
-- Zeigt die eigene Prognose (Bürgermeister + Sitzverteilung)
-- Zeigt die Gesamtübersicht erst, wenn die eigene Prognose abgegeben wurde (Lock-Mechanismus)
+- Zeigt die eigene Hauptwahl-Prognose (Bürgermeister + Sitzverteilung)
+- Zeigt die Hauptwahl-Gesamtübersicht erst, wenn die eigene Prognose abgegeben wurde (Lock-Mechanismus)
+- Zeigt die Stichwahl-Statistik (Balkendiagramm + eigene Prognose) immer — kein Lock
 - Admins sehen einen **„CSV exportieren"**-Button oben rechts
 
 ---
@@ -176,7 +184,65 @@ gruchmannPercent → nullable, integer, min:0, max:100
 **Route:** `GET /admin/prognosen` → `admin.forecasts`
 **Layout:** `layouts.app` (Sidebar)
 
-Admin-Übersicht aller abgegebenen Prognosen. Im Sidebar nur für Nutzer mit `is_admin = true` sichtbar.
+Admin-Übersicht aller abgegebenen Hauptwahl-Prognosen. Suche nach Pseudonym, Filter nach echt/fake, Duplikat-IP-Erkennung, Fake-Toggle.
+
+---
+
+## Admin\Ranking
+
+**Klasse:** `App\Livewire\Admin\Ranking`
+**View:** `resources/views/livewire/admin/ranking.blade.php`
+**Route:** `GET /admin/ranking` → `admin.ranking`
+**Layout:** `layouts.app`
+
+Bewertet alle echten Hauptwahl-Prognosen anhand des offiziellen Ergebnisses (hardcodiert als Konstanten). Scoring: `seat_error + (mayor_error × 3)`, sortiert aufsteigend.
+
+---
+
+## Admin\RunoffForecasts
+
+**Klasse:** `App\Livewire\Admin\RunoffForecasts`
+**View:** `resources/views/livewire/admin/runoff-forecasts.blade.php`
+**Route:** `GET /admin/stichwahl/prognosen` → `admin.runoff-forecasts`
+**Layout:** `layouts.app`
+
+Admin-Übersicht aller Stichwahl-Prognosen. Suche nach Pseudonym, Duplikat-IP-Erkennung. Zeigt Gewinner-Tipp als farbigen Badge (rot = Gruchmann/SPD, blau = Lemke/CSU) und den optionalen Stimmenanteil.
+
+| Computed Property | Beschreibung |
+| --- | --- |
+| `duplicateIps()` | IP-Adressen mit mehr als einem Eintrag |
+| `runoffForecasts()` | Gefilterte Abfrage mit `user` eager-loaded |
+
+---
+
+## Admin\RunoffRanking
+
+**Klasse:** `App\Livewire\Admin\RunoffRanking`
+**View:** `resources/views/livewire/admin/runoff-ranking.blade.php`
+**Route:** `GET /admin/stichwahl/ranking` → `admin.runoff-ranking`
+**Layout:** `layouts.app`
+
+Statistik und sortiertes Ranking aller Stichwahl-Prognosen.
+
+### Konstanten (nach Wahl setzen)
+
+```php
+public const OFFICIAL_WINNER = null;            // 'gruchmann' | 'lemke' | null
+public const OFFICIAL_GRUCHMANN_PERCENT = null; // int | null
+```
+
+Sobald das Wahlergebnis feststeht, diese Werte in der Klasse setzen — das Ranking und die ✓/✗-Spalte aktualisieren sich automatisch.
+
+### Sortierlogik
+
+| Zustand | Primär | Sekundär |
+| --- | --- | --- |
+| Ergebnis unbekannt | Gruchmann-Tipper zuerst | Stimmenanteil absteigend |
+| Ergebnis bekannt | Korrekte Sieger-Vorhersage zuerst | Kleinste Abweichung vom offiziellen Stimmenanteil |
+
+| Computed Property | Beschreibung |
+| --- | --- |
+| `stats()` | Gibt `Collection` zurück mit Gesamtzahl, Gruchmann/Lemke-Anzahl + Anteil, Ø Stimmenanteil, sortierte Prognosen-Liste |
 
 ---
 

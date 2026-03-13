@@ -3,6 +3,8 @@
 use App\Http\Controllers\ForecastExportController;
 use App\Livewire\Admin\Forecasts as AdminForecasts;
 use App\Livewire\Admin\Ranking as AdminRanking;
+use App\Livewire\Admin\RunoffForecasts as AdminRunoffForecasts;
+use App\Livewire\Admin\RunoffRanking as AdminRunoffRanking;
 use App\Livewire\Dashboard;
 use App\Livewire\ForecastForm;
 use App\Livewire\Results;
@@ -43,5 +45,13 @@ Route::livewire('/admin/prognosen', AdminForecasts::class)
 Route::livewire('/admin/ranking', AdminRanking::class)
     ->middleware(['auth', 'verified'])
     ->name('admin.ranking');
+
+Route::livewire('/admin/stichwahl/prognosen', AdminRunoffForecasts::class)
+    ->middleware(['auth', 'verified'])
+    ->name('admin.runoff-forecasts');
+
+Route::livewire('/admin/stichwahl/ranking', AdminRunoffRanking::class)
+    ->middleware(['auth', 'verified'])
+    ->name('admin.runoff-ranking');
 
 require __DIR__.'/settings.php';

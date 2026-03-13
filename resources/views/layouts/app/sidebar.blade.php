@@ -19,7 +19,7 @@
                     wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:sidebar.item>
-                <flux:sidebar.item icon="chart-bar" :href="route('prognose')" :current="request()->routeIs('prognose')"
+                <flux:sidebar.item icon="chart-bar" :href="route('stichwahl')" :current="request()->routeIs('stichwahl')"
                     wire:navigate>
                     Wahlprognose
                 </flux:sidebar.item>
@@ -49,12 +49,12 @@
                         :current="request()->routeIs('stichwahl')" wire:navigate>
                         Stichwahl
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="shield-check" :href="route('admin.forecasts')"
-                        :current="request()->routeIs('admin.forecasts')" wire:navigate>
+                    <flux:sidebar.item icon="shield-check" :href="route('admin.runoff-forecasts')"
+                        :current="request()->routeIs('admin.runoff-forecasts')" wire:navigate>
                         Prognosen
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="shield-check" :href="route('admin.ranking')"
-                        :current="request()->routeIs('admin.ranking')" wire:navigate>
+                    <flux:sidebar.item icon="shield-check" :href="route('admin.runoff-ranking')"
+                        :current="request()->routeIs('admin.runoff-ranking')" wire:navigate>
                         Ranking
                     </flux:sidebar.item>
                 </flux:sidebar.group>

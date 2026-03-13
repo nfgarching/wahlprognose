@@ -30,7 +30,7 @@ Bürgerinnen und Bürger können vor der Wahl ihre persönliche Einschätzung zu
 - **Keine Pflichtregistrierung** — Pseudonym genügt für eine anonyme Prognose
 - **Bearbeitungsfenster** — Registrierte Nutzer können bis zur Deadline ihre Prognose anpassen
 - **Ergebnisseite** — Aggregierte Auswertung nach Ablauf der Abgabefrist
-- **Admin-Bereich** — Prognosen-Übersicht und CSV-Export für Admins
+- **Admin-Bereich** — Prognosen-Übersicht und CSV-Export für Admins; eigene Übersicht und Ranking für Stichwahl-Prognosen
 
 ## Tech-Stack
 
@@ -93,7 +93,10 @@ composer dev
 | `/impressum` | Impressum | — |
 | `/dashboard` | Persönliches Dashboard + Gesamtübersicht | auth |
 | `/dashboard/export` | CSV-Export aller Prognosen (inkl. Userdaten) | auth + admin |
-| `/admin/prognosen` | Admin-Übersicht aller Prognosen | auth |
+| `/admin/prognosen` | Admin-Übersicht aller Prognosen (Hauptwahl) | auth + admin |
+| `/admin/ranking` | Ranking aller Hauptwahl-Prognosen | auth + admin |
+| `/admin/stichwahl/prognosen` | Admin-Übersicht aller Stichwahl-Prognosen | auth + admin |
+| `/admin/stichwahl/ranking` | Ranking + Statistik der Stichwahl-Prognosen | auth + admin |
 | `/settings/*` | Profil, Passwort, Erscheinungsbild, 2FA | auth |
 
 ---

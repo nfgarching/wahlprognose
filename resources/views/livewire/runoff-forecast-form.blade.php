@@ -152,7 +152,7 @@
     {{-- ============================================================ --}}
     {{--  SCHRITT 3: Optionale Prozentangabe                         --}}
     {{-- ============================================================ --}}
-    @if (false)
+    @if (true)
         <div
             class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6"
             x-data
@@ -181,7 +181,7 @@
                     </label>
                     <input
                         type="number"
-                        min="50"
+                        min="51"
                         max="100"
                         wire:model.live="gruchmannPercent"
                         placeholder="—"
@@ -428,32 +428,38 @@
                     {{-- Gruchmann-Balken --}}
                     <div class="space-y-2">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-semibold text-red-600 w-28 flex-shrink-0">Dr. Gruchmann <span class="font-normal text-slate-400">SPD</span></span>
+                            <div class="w-28 flex-shrink-0">
+                                <span class="text-xs font-semibold text-red-600">Dr. Gruchmann <span class="font-normal text-slate-400">SPD</span></span>
+                                <div class="text-xs text-slate-500 tabular-nums">{{ $this->statistics['gruchmann'] }}&thinsp;{{ $this->statistics['gruchmann'] === 1 ? 'Stimme' : 'Stimmen' }}</div>
+                            </div>
                             <div class="flex-1 h-5 bg-white rounded-full overflow-hidden border border-slate-200">
                                 <div class="h-full bg-red-600 rounded-full flex items-center justify-end pr-1.5 transition-all duration-500"
                                      style="width: {{ $this->statistics['gruchmann_pct'] }}%">
                                     @if ($this->statistics['gruchmann_pct'] >= 20)
-                                        <span class="text-xs font-bold text-white">{{ $this->statistics['gruchmann_pct'] }}%</span>
+                                        <span class="text-xs font-bold text-white tabular-nums">{{ $this->statistics['gruchmann'] }}&thinsp;×</span>
                                     @endif
                                 </div>
                             </div>
-                            <span class="text-xs font-bold text-slate-600 w-8 text-right flex-shrink-0">
-                                @if ($this->statistics['gruchmann_pct'] < 20) {{ $this->statistics['gruchmann_pct'] }}% @endif
+                            <span class="text-xs font-bold text-slate-600 w-8 text-right flex-shrink-0 tabular-nums">
+                                @if ($this->statistics['gruchmann_pct'] < 20) {{ $this->statistics['gruchmann'] }}&thinsp;× @endif
                             </span>
                         </div>
 
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-semibold text-sky-700 w-28 flex-shrink-0">Thomas Lemke <span class="font-normal text-slate-400">CSU</span></span>
+                            <div class="w-28 flex-shrink-0">
+                                <span class="text-xs font-semibold text-sky-700">Thomas Lemke <span class="font-normal text-slate-400">CSU</span></span>
+                                <div class="text-xs text-slate-500 tabular-nums">{{ $this->statistics['lemke'] }}&thinsp;{{ $this->statistics['lemke'] === 1 ? 'Stimme' : 'Stimmen' }}</div>
+                            </div>
                             <div class="flex-1 h-5 bg-white rounded-full overflow-hidden border border-slate-200">
                                 <div class="h-full bg-sky-700 rounded-full flex items-center justify-end pr-1.5 transition-all duration-500"
                                      style="width: {{ $this->statistics['lemke_pct'] }}%">
                                     @if ($this->statistics['lemke_pct'] >= 20)
-                                        <span class="text-xs font-bold text-white">{{ $this->statistics['lemke_pct'] }}%</span>
+                                        <span class="text-xs font-bold text-white tabular-nums">{{ $this->statistics['lemke'] }}&thinsp;×</span>
                                     @endif
                                 </div>
                             </div>
-                            <span class="text-xs font-bold text-slate-600 w-8 text-right flex-shrink-0">
-                                @if ($this->statistics['lemke_pct'] < 20) {{ $this->statistics['lemke_pct'] }}% @endif
+                            <span class="text-xs font-bold text-slate-600 w-8 text-right flex-shrink-0 tabular-nums">
+                                @if ($this->statistics['lemke_pct'] < 20) {{ $this->statistics['lemke'] }}&thinsp;× @endif
                             </span>
                         </div>
                     </div>
