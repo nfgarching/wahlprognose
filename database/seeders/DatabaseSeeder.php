@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Norbert Fröhler',
                 'email' => 'norbert.froehler@gmail.com',
                 'password' => \Illuminate\Support\Facades\Hash::make('v1adimiR'),
-                'is_admin' => True,
+                'is_admin' => true,
             ]);
         }
 
@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             PartySeeder::class,
             CandidateSeeder::class,
             // ForecastSeeder::class,
+            // RunoffForecastSeeder::class,
         ]);
     }
 }
